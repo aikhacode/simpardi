@@ -3,7 +3,7 @@
 	"private": true,
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "vite --host arsipku.test",
+		"dev": "vite --host simpardi.test",
 		"build": "rm -rf dist/ && rm -rf ../../public/app/ && vite build && cp -r dist/ ../../public/app/",
 		"preview": "vite preview --port 4173",
 		"lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
