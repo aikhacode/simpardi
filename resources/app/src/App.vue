@@ -12,7 +12,7 @@
             <AppFooter />
         </div>
 
-		<AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" />
+		<!-- <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" /> -->
         <transition name="layout-mask">
             <div class="layout-mask p-component-overlay" v-if="mobileMenuActive"></div>
         </transition>
@@ -45,7 +45,7 @@ export default {
 				{
 					label: 'Admin', 
 					items: [
-						{label: 'Data User', icon: 'pi pi-fw pi-user', to: '/formlayout'},
+						{label: 'Data User', icon: 'pi pi-fw pi-user', to: '/data-user'},
 
                         ]
                 },

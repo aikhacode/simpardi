@@ -12,6 +12,11 @@ const routes = [
                 name: 'dashboard',
                 component: () => import('./components/Dashboard.vue')
             },
+             {
+                path: '/data-user',
+                name: 'datauser',
+                component: () => import('./pages/DataUser.vue')   
+            },
             {
                 path: '/data-pegawai',
                 name: 'datapegawai',

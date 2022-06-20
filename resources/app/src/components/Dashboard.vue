@@ -61,7 +61,7 @@
 			</div>
 		</div>
 
-	<div class="col-12 xl:col-6">
+<!-- 	<div class="col-12 xl:col-6">
 		<div class="card">
 			<h5>Recent Sales</h5>
 			<DataTable :value="products" :rows="5" :paginator="true" responsiveLayout="scroll">
@@ -237,7 +237,7 @@
 				</a>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	</div>
 </template>
 
