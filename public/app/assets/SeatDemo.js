@@ -1,1 +1,0 @@
-import{_ as t,o as s,c as o,d as e}from"./index.js";const c={},a={class:"flex align-items-center py-5 px-3"},n=e("i",{class:"pi pi-fw pi-ticket mr-2 text-2xl"},null,-1),i=e("p",{class:"m-0 text-lg"},"Seat Component Content via Child Route",-1),_=[n,i];function r(p,l,d,m,f,x){return s(),o("div",a,_)}var u=t(c,[["render",r]]);export{u as default};
