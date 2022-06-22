@@ -1,16 +1,23 @@
 <template>
 	<div :class="containerClass" @click="onWrapperClick">
         <AppTopBar @menu-toggle="onMenuToggle" />
-        <div class="layout-sidebar" @click="onSidebarClick">
-            <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
+        <div  class="layout-sidebar" @click="onSidebarClick">
+            <AppMenu :model="getMenuModel()" @menuitem-click="onMenuItemClick" />
         </div>
 
-        <div class="layout-main-container">
+        <div v-if="isLogin" class="layout-main-container">
             <div class="layout-main">
                 <router-view />
             </div>
+           
             <AppFooter />
         </div>
+        <div v-else>
+            <router-view />
+            <AppFooter />
+        </div>
+
+        
 
 		<!-- <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" /> -->
         <transition name="layout-mask">
@@ -24,11 +31,13 @@ import AppTopBar from './AppTopbar.vue';
 import AppMenu from './AppMenu.vue';
 import AppConfig from './AppConfig.vue';
 import AppFooter from './AppFooter.vue';
+import {useStore} from './store.js';
 
 export default {
     emits: ['change-theme'],
     data() {
         return {
+            store: useStore(),
             layoutMode: 'static',
             staticMenuInactive: false,
             overlayMenuActive: false,
@@ -37,13 +46,14 @@ export default {
                 {
                     label: 'Home',
                     items: [{
-                        label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/'
+                        label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard'
                     },
-                     {label: 'History', icon: 'pi pi-fw pi-list', to: '/'},
+                     {label: 'History', icon: 'pi pi-fw pi-list', to: '/history'},
                      ]
                 },
 				{
 					label: 'Admin', 
+                    role: 'Admin',
 					items: [
 						{label: 'Data User', icon: 'pi pi-fw pi-user', to: '/data-user'},
 
@@ -61,7 +71,7 @@ export default {
                 {   label: 'AKUN',
                     items: [
 
-                        {label: 'Logout', icon: 'pi pi-fw pi-sign-out', to: '/logout'},
+                        (useStore().isLoggedIn()) ? {label: 'Logout', icon: 'pi pi-fw pi-sign-out', to: '/logout'} : {label: 'Login', icon: 'pi pi-fw pi-sign-in', to: '/login'},
                        
                         ]
                 },
@@ -173,6 +183,17 @@ export default {
         }
     },
     methods: {
+        getMenuModel(){
+            // if login true -> if role admin => all else only not role admin
+            return this.store.isLoggedIn() ? this.menu.filter((val)=>{
+                if (this.store.login.data.role == 'Admin') return true;
+                else return (val.role == undefined || val.role != 'Admin')
+            }) : this.menu.filter((val)=>{
+                    return (val.role == undefined || val.role != 'Admin')
+                })
+
+            
+        },
         onWrapperClick() {
             if (!this.menuClick) {
                 this.overlayMenuActive = false;
@@ -242,6 +263,7 @@ export default {
         }
     },
     computed: {
+        isLogin: () => useStore().isLoggedIn(),
         containerClass() {
             return ['layout-wrapper', {
                 'layout-overlay': this.layoutMode === 'overlay',

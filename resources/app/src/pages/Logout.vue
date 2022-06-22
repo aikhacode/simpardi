@@ -1,65 +1,90 @@
 <template>
-    <div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
-        <div class="grid justify-content-center p-2 lg:p-0" style="min-width:80%">
+    <div
+        class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
+    >
+        <div
+            class="grid justify-content-center p-2 lg:p-0"
+            style="min-width: 80%"
+        >
             <div class="col-12 mt-5 xl:mt-0 text-center">
-                <!-- <img :src="''" alt="" class="mb-5" style="width:81px; height:60px;"> -->
+                <!--   <img src="/layout/images/logo-orange.svg" alt="Sakai logo" class="mb-5" style="width:81px; height:60px;"> -->
             </div>
-            <div class="col-12 xl:col-6" style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color), rgba(33, 150, 243, 0) 30%);">
-                <div class="h-full w-full m-0 py-7 px-4" style="border-radius:53px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
-                    <div class="text-center mb-5">
-                        <img src="/images/avatar/amyelsner.png" alt="Image" height="50" class="mb-3">
-                        <div class="text-900 text-3xl font-medium mb-3">Selamat Datang</div>
-                        <span class="text-600 font-medium">Sign in to continue</span>
-                    </div>
-                
-                    <div class="w-full md:w-10 mx-auto">
-                        <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" v-model="email" type="text" class="w-full mb-3" placeholder="Email" style="padding:1rem;" />
-                
-                        <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" inputStyle="padding:1rem"></Password>
-                
-                        <div class="flex align-items-center justify-content-between mb-5">
-                            <div class="flex align-items-center">
-                                <!-- <Checkbox id="rememberme1" v-model="checked" :binary="true" class="mr-2"></Checkbox>
-                                <label for="rememberme1">Remember me</label> -->
-                            </div>
-                            <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
+            <div
+                class="col-12 xl:col-6"
+                style="
+                    border-radius: 56px;
+                    padding: 0.3rem;
+                    background: linear-gradient(
+                        180deg,
+                        rgba(247, 149, 48, 0.4) 10%,
+                        rgba(247, 149, 48, 0) 30%
+                    );
+                "
+            >
+                <div
+                    class="h-full w-full m-0 py-7 px-4"
+                    style="
+                        border-radius: 53px;
+                        background: linear-gradient(
+                            180deg,
+                            var(--surface-50) 38.9%,
+                            var(--surface-0)
+                        );
+                    "
+                >
+                    <div class="grid flex flex-column align-items-center">
+                        <div
+                            class="flex justify-content-center align-items-center bg-orange-500 border-circle"
+                            style="width: 3.2rem; height: 3.2rem"
+                        >
+                            <i class="pi pi-fw pi-lock text-2xl text-50"></i>
                         </div>
-                        <Button label="Sign In" class="w-full p-3 text-xl"></button>
+                        <h1
+                            class="text-900 font-bold text-4xl lg:text-5xl mb-2"
+                        >
+                            Terima Kasih
+                        </h1>
+                        <span class="text-600 text-center"
+                            >Sampai berjumpa lagi..</span
+                        >
+                        <img
+                            src="/layout/images/asset-access.svg"
+                            alt="Access denied"
+                            class="mt-5"
+                            width="80%"
+                        />
+                        <div class="col-12 mt-5 text-center">
+                            <i
+                                class="pi pi-fw pi-arrow-left text-blue-500 mr-2"
+                                style="vertical-align: center"
+                            ></i>
+                            <router-link to="/" class="text-blue-500"
+                                >Go to Dashboard</router-link
+                            >
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<script setup>
+import {useStore} from '@/store.js';
+import {useRouter} from 'vue-router';
+import {onMounted} from 'vue';
 
-<script>
-export default {
-    data() {
-        return {
-            email: '',
-            password: '',
-            checked: false
-        }
-    },
-    computed: {
-        logoColor() {
-            if (this.$appState.darkTheme) return 'white';
-            return 'dark';
-        }
+const store = useStore();
+const router = useRouter();
+
+onMounted(()=>{
+    if (store.doLogout())
+    {
+        const logoutTimeout = setTimeout(()=>{
+            clearTimeout(logoutTimeout);
+            router.push('/');
+        }, 500);
+
+
     }
-}
+});
 </script>
-
-<style scoped>
-.pi-eye {
-    transform:scale(1.6);
-    margin-right: 1rem;
-}
-
-.pi-eye-slash {
-    transform:scale(1.6);
-    margin-right: 1rem;
-}
-</style>

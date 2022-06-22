@@ -1,1 +1,0 @@
-import{_ as t,o as e,c,d as s}from"./index.cb2347e1.js";const o={},a={class:"grid"},r=s("div",{class:"col-12"},[s("div",{class:"card"},[s("h5",null,"Empty Page"),s("p",null,"Use this page to start from scratch and place your custom content.")])],-1),n=[r];function d(_,l,p,i,m,u){return e(),c("div",a,n)}var h=t(o,[["render",d]]);export{h as default};

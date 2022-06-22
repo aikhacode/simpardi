@@ -1,206 +1,78 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
-import App from './App.vue';
+import { createRouter, createWebHashHistory } from "vue-router";
+import App from "./App.vue";
+import { useStore } from "./store.js";
 
 const routes = [
     {
-        path: '/',
-        name: 'app',
+        path: "/",
+        name: "app",
         component: App,
         children: [
             {
-                path: '',
-                name: 'dashboard',
-                component: () => import('./components/Dashboard.vue')
-            },
-             {
-                path: '/data-user',
-                name: 'datauser',
-                component: () => import('./pages/DataUser.vue')   
+                path: "",
+                name: "hero",
+                component: () => import("./pages/Hero.vue"),
             },
             {
-                path: '/data-pegawai',
-                name: 'datapegawai',
-                component: () => import('./pages/DataPegawai.vue')   
+                path: "/dashboard",
+                name: "dashboard",
+                component: () => import("./components/Dashboard.vue"),
+                meta: { requiresAuth: true },
             },
             {
-                path: '/dokument-internal',
-                name: 'dokumentinternal',
-                component: () => import('./pages/DokumentInternal.vue')   
+                path: "/history",
+                name: "history",
+                component: () => import("./components/History.vue"),
+                meta: { requiresAuth: true },
             },
             {
-                path: '/dokument-eksternal',
-                name: 'dokumenteksternal',
-                component: () => import('./pages/DokumentEksternal.vue')   
+                path: "/data-user",
+                name: "datauser",
+                component: () => import("./pages/DataUser.vue"),
+                meta: { requiresAuth: true },
             },
             {
-                path: '/surat-masuk',
-                name: 'suratmasuk',
-                component: () => import('./pages/SuratMasuk.vue')   
+                path: "/data-pegawai",
+                name: "datapegawai",
+                component: () => import("./pages/DataPegawai.vue"),
+                meta: { requiresAuth: true },
             },
             {
-                path: '/surat-keluar',
-                name: 'suratkeluar',
-                component: () => import('./pages/SuratKeluar.vue')   
+                path: "/dokument-internal",
+                name: "dokumentinternal",
+                component: () => import("./pages/DokumentInternal.vue"),
+                meta: { requiresAuth: true },
             },
             {
-                path: '/formlayout',
-                name: 'formlayout',
-                component: () => import('./components/FormLayoutDemo.vue')
+                path: "/dokument-eksternal",
+                name: "dokumenteksternal",
+                component: () => import("./pages/DokumentEksternal.vue"),
+                meta: { requiresAuth: true },
             },
             {
-                path: '/input',
-                name: 'input',
-                component: () => import('./components/InputDemo.vue')
+                path: "/surat-masuk",
+                name: "suratmasuk",
+                component: () => import("./pages/SuratMasuk.vue"),
+                meta: { requiresAuth: true },
             },
             {
-                path: '/floatlabel',
-                name: 'floatlabel',
-                component: () => import('./components/FloatLabelDemo.vue')
+                path: "/surat-keluar",
+                name: "suratkeluar",
+                component: () => import("./pages/SuratKeluar.vue"),
+                meta: { requiresAuth: true },
             },
-            {
-                path: '/invalidstate',
-                name: 'invalidstate',
-                component: () => import('./components/InvalidStateDemo.vue')
-            },
-            {
-                path: '/button',
-                name: 'button',
-                component: () => import('./components/ButtonDemo.vue')
-            },
-            {
-                path: '/table',
-                name: 'table',
-                component: () => import('./components/TableDemo.vue')
-            },
-            {
-                path: '/list',
-                name: 'list',
-                component: () => import('./components/ListDemo.vue')
-            },
-            {
-                path: '/tree',
-                name: 'tree',
-                component: () => import('./components/TreeDemo.vue')
-            },
-            {
-                path: '/panel',
-                name: 'panel',
-                component: () => import('./components/PanelsDemo.vue')
-            },
-            {
-                path: '/overlay',
-                name: 'overlay',
-                component: () => import('./components/OverlayDemo.vue')
-            },
-            {
-                path: '/media',
-                name: 'media',
-                component: () => import('./components/MediaDemo.vue')
-            },
-            {
-                path: '/menu',
-                component: () => import('./components/MenuDemo.vue'),
-                children: [
-                    {
-                        path: '',
-                        component: () => import('./components/menu/PersonalDemo.vue')
-                    },
-                    {
-                        path: '/menu/seat',
-                        component: () => import('./components/menu/SeatDemo.vue')
-                    },
-                    {
-                        path: '/menu/payment',
-                        component: () => import('./components/menu/PaymentDemo.vue')
-                    },
-                    {
-                        path: '/menu/confirmation',
-                        component: () => import('./components/menu/ConfirmationDemo.vue')
-                    },
-                ],
-            },
-            {
-                path: '/messages',
-                name: 'messages',
-                component: () => import('./components/MessagesDemo.vue')
-            },
-            {
-                path: '/file',
-                name: 'file',
-                component: () => import('./components/FileDemo.vue')
-            },
-            {
-                path: '/chart',
-                name: 'chart',
-                component: () => import('./components/ChartDemo.vue')
-            },
-            {
-                path: '/misc',
-                name: 'misc',
-                component: () => import('./components/MiscDemo.vue')
-            },
-            {
-                path: '/crud',
-                name: 'crud',
-                component: () => import('./pages/CrudDemo.vue')
-            },
-            {
-                path: '/timeline',
-                name: 'timeline',
-                component: () => import('./pages/TimelineDemo.vue')
-            },
-            {
-                path: '/empty',
-                name: 'empty',
-                component: () => import('./components/EmptyPage.vue')
-            },
-            {
-                path: '/documentation',
-                name: 'documentation',
-                component: () => import('./components/Documentation.vue')
-            },
-            {
-                path: '/blocks',
-                name: 'blocks',
-                component: () => import('./components/BlocksDemo.vue')
-            },
-            {
-                path: '/icons',
-                name: 'icons',
-                component: () => import('./components/IconsDemo.vue')
-            }
-        ]
+        ],
     },
     {
-        path: '/login',
-        name: 'login',
-        component: () => import('./pages/Login.vue')
-    },
-     {
-        path: '/logout',
-        name: 'logout',
-        component: () => import('./pages/Logout.vue')
+        path: "/login",
+        name: "login",
+        component: () => import("./pages/Login.vue"),
     },
     {
-        path: '/landing',
-        name: 'landing',
-        component: () => import('./pages/LandingDemo.vue')
+        path: "/logout",
+        name: "logout",
+        component: () => import("./pages/Logout.vue"),
     },
-    {
-        path: '/error',
-        name: 'error',
-        component: () => import('./pages/Error.vue')
-    },
-    {
-        path: '/notfound',
-        name: 'notfound',
-        component: () => import('./pages/NotFound.vue')
-    },
-    {
-        path: '/access',
-        name: 'access',
-        component: () => import('./pages/Access.vue')
-    }
 ];
 
 const router = createRouter({
@@ -208,5 +80,23 @@ const router = createRouter({
     routes,
 });
 
+router.beforeEach((to, from) => {
+    const auth = useStore();
+
+    if (to.meta.requiresAuth && !auth.isLoggedIn()) {
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
+        return {
+            path: "/login",
+            // save the location we were at to come back later
+            query: { redirect: to.fullPath },
+        };
+    }
+});
+
+router.beforeEach((to, from, next) => {
+    window.scrollTo(0, 0);
+    next();
+});
 
 export default router;

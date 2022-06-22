@@ -97,10 +97,7 @@ import TriStateCheckbox from "primevue/tristatecheckbox";
 import CodeHighlight from "./AppCodeHighlight.js";
 import BlockViewer from "./BlockViewer.vue";
 
-router.beforeEach((to, from, next) => {
-    window.scrollTo(0, 0);
-    next();
-});
+import {createPinia} from 'pinia'
 
 const app = createApp(AppWrapper);
 
@@ -113,6 +110,7 @@ app.use(PrimeVue, { ripple: true, inputStyle: "outlined" });
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(router);
+app.use(createPinia())
 
 app.directive("tooltip", Tooltip);
 app.directive("ripple", Ripple);

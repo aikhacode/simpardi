@@ -1,4 +1,5 @@
 <template>
+
     <router-view></router-view>
 </template>
 
@@ -32,7 +33,6 @@ export default {
         };
 
         EventBus.on("theme-change", this.themeChangeListener);
-       
     },
     beforeUnmount() {
         EventBus.off("theme-change", this.themeChangeListener);
