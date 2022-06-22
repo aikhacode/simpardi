@@ -43,11 +43,14 @@ export default {
     data() {
         return {
             email: 'test@sipardi.ujung',
-            password: 'apaaja',
+            password: '12345',
             checked: true,
             store: useStore(),
             router: useRouter(),
         }
+    },
+    created() {
+        // console.log(this.store.parseApi())
     },
     computed: {
         logoColor() {
@@ -56,8 +59,11 @@ export default {
         }
     },
     methods:{
-        login(){
-           if (this.store.doLogin()) {
+        async login(){
+           if (await this.store.doLogin({
+            email:this.email,
+            password:this.password
+           })) {
               
                this.router.push('/dashboard') 
            } 

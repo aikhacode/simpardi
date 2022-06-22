@@ -76,8 +76,8 @@ import {onMounted} from 'vue';
 const store = useStore();
 const router = useRouter();
 
-onMounted(()=>{
-    if (store.doLogout())
+onMounted(async ()=>{
+    if (await store.doLogout())
     {
         const logoutTimeout = setTimeout(()=>{
             clearTimeout(logoutTimeout);

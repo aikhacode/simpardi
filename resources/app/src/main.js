@@ -99,6 +99,7 @@ import BlockViewer from "./BlockViewer.vue";
 
 import {createPinia} from 'pinia'
 
+
 const app = createApp(AppWrapper);
 
 app.config.globalProperties.$appState = reactive({
@@ -200,3 +201,9 @@ app.component("TriStateCheckbox", TriStateCheckbox);
 app.component("BlockViewer", BlockViewer);
 
 app.mount("#app");
+
+if (location.hostname != 'simpardi.test') {
+    console.log = () =>{
+
+    }
+}
