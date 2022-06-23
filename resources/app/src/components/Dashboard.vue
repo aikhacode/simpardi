@@ -320,8 +320,11 @@ export default {
 	beforeUnmount() {
         EventBus.off('change-theme', this.themeChangeListener );
     },
-	created() {
+	async created() {
 		this.productService = new ProductService();
+
+		await this.store.getPegawai()
+
 	},
 	methods: {
 		formatCurrency(value) {

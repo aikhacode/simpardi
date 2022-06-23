@@ -18,6 +18,7 @@ class UserFactory extends Factory {
 			'email_verified_at' => now(),
 			'password' => md5('12345'), // password
 			'remember_token' => Str::random(10),
+			
 		];
 	}
 

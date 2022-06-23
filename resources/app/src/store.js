@@ -19,6 +19,7 @@ export const useStore = defineStore("main", {
             },
             pegawai: {
                 count: 0,
+                data:[],
             },
             document: {
                 internal: {
@@ -41,6 +42,35 @@ export const useStore = defineStore("main", {
     actions: {
         isLoggedIn() {
             return this.authenticated;
+        },
+        async getPegawai(){
+            let api = this.parseApi();
+            let headersList = {
+                "Accept": "application/json",
+                // "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+                "Authorization": `Bearer ${this.token}` 
+               }
+            let reqOptions = {
+                url: this.parseApi()+'/pegawai',
+                method: "GET",
+                headers: headersList,
+              }
+              
+            try {
+                let res = await axios.request(reqOptions)
+                // console.log(res.data);
+                this.pegawai.count = res.data.length
+                this.pegawai.data = res.data
+                return {
+                    data: res.data,
+                    count: res.data.length
+                }
+            } catch (err) {
+                console.log(err.response.status);
+                return false
+            }
+
+            
         },
         async doLogin(obj) {
             let api = this.parseApi();
