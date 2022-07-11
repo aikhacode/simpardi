@@ -18,4 +18,9 @@ class Pegawai extends Model {
 		'tmt_skcpns', 'tmt_pensiun', 'pendidikan', 'perguruan_tinggi',
 		'tahun_lulus', 'sip_sik', 'tgl_sipsik', 'no_str', 'tgl_str',
 	];
+
+	public function arsips()
+	{
+		return $this->hasMany(ArsipPegawai::class,'pegawai_id');
+	}
 }

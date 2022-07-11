@@ -20,4 +20,5 @@ jobs:
           **/.git*/**
           **/node_modules/**
           **/vendor/**
-          **/resources/app/**
+          **/resources/app/dist/**
+          **/resources/app/node_modules/**

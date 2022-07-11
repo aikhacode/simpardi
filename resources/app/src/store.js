@@ -24,19 +24,24 @@ export const useStore = defineStore("main", {
             document: {
                 internal: {
                     count: 0,
+                    data:[]
                 },
                 external: {
                     count: 0,
+                    data:[]
                 },
             },
             mail: {
                 inbox: {
                     count: 0,
+                    data:[]
                 },
                 outbox: {
                     count: 0,
+                    data:[]
                 },
             },
+           
         };
     },
     actions: {
@@ -114,8 +119,16 @@ export const useStore = defineStore("main", {
 
             return !this.authenticated;
         },
-        parseApi() {
-            return `${location.protocol}//${location.hostname}/api`;
+        parseApi(namespace='') {
+            return `${location.protocol}//${location.hostname}/api${namespace}`;
         },
+        get_authenticated_headers(){
+            return {
+              
+                  "Accept": "application/json",
+                  "Authorization": `Bearer ${this.token}` 
+                }
+        }
+
     },
 });

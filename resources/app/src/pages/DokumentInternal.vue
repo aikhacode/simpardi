@@ -8,13 +8,15 @@
 						<div class="my-2">
 							<Button label="New" icon="pi pi-plus" class="p-button-success mr-2" @click="openNew" />
 							<Button label="Delete" icon="pi pi-trash" class="p-button-danger" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" />
+							
 						</div>
 					</template>
 
-					<template v-slot:end>
-						<FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" />
-						<Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"  />
-					</template>
+					 <template v-slot:end>
+					   <!--  <FileUploadArsip mode="basic" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.png,.tiff,.bmp" :maxFileSize="10000000" label="Upload" chooseLabel="Upload" class=""  customUpload  /> -->
+						<!-- <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" />
+						<Button label="Export" icon="pi pi-upload" class="p-button-help" @click="exportCSV($event)"  /> -->
+					</template> 
 				</Toolbar>
 
 				<DataTable ref="dt" :value="products" v-model:selection="selectedProducts" dataKey="id" :paginator="true" :rows="10" :filters="filters"
@@ -83,6 +85,7 @@
 
 				<Dialog v-model:visible="productDialog" :style="{width: '450px'}" header="Product Details" :modal="true" class="p-fluid">
 					<img :src="'images/product/' + product.image" :alt="product.image" v-if="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" />
+					<FileUpload  mode="basic" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.png,.tiff,.bmp" :maxFileSize="1000000" label="Upload" chooseLabel="Upload" class="mr-2 inline-block" url="/upload" @upload="upload($event)" />
 					<div class="field">
 						<label for="name">Name</label>
 						<InputText id="name" v-model.trim="product.name" required="true" autofocus :class="{'p-invalid': submitted && !product.name}" />
@@ -178,10 +181,17 @@
 <script>
 import {FilterMatchMode} from 'primevue/api';
 import ProductService from '../service/ProductService.js';
+import FileUploadArsip from '../components/FileUploadArsip.vue';
+import {parseApi} from "@/helper.js";
+import axios from "axios";
 
 export default {
+	components: {
+		FileUploadArsip
+	},
 	data() {
 		return {
+			uploadUrl: parseApi('/upload-arsip') ,
 			products: null,
 			productDialog: false,
 			deleteProductDialog: false,
@@ -288,7 +298,14 @@ export default {
             this.filters = {
                 'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
             }
-        }
+
+        },
+        upload(e){
+        	console.log('uploaded event trigg',e)
+        	this.$toast.add({severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000});
+        },
+		
+        
 	}
 }
 </script>

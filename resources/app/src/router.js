@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import App from "./App.vue";
 import { useStore } from "./store.js";
+import SuratKeluar from "./pages/SuratKeluar.vue"
+import SuratMasuk from "./pages/SuratMasuk.vue"
 
 const routes = [
     {
@@ -52,15 +54,25 @@ const routes = [
             {
                 path: "/surat-masuk",
                 name: "suratmasuk",
-                component: () => import("./pages/SuratMasuk.vue"),
+                // component: () => import("./pages/SuratMasuk.vue"),
+                component: SuratMasuk,
                 meta: { requiresAuth: true },
             },
             {
                 path: "/surat-keluar",
                 name: "suratkeluar",
-                component: () => import("./pages/SuratKeluar.vue"),
+                // component: () => import("./pages/SuratKeluar.vue"),
+                component: SuratKeluar,
                 meta: { requiresAuth: true },
+                
             },
+            // {
+            //     path:'/input-surat-keluar',
+            //     name:'inputsuratkeluar',
+            //     component: () => import("./pages/InputSuratKeluar.vue"),
+            // }
+           
+
         ],
     },
     {
@@ -83,6 +95,8 @@ const router = createRouter({
 router.beforeEach((to, from) => {
     const auth = useStore();
 
+    
+    // if (location.hostname != 'simpardi.test')
     if (to.meta.requiresAuth && !auth.isLoggedIn()) {
         // this route requires auth, check if logged in
         // if not, redirect to login page.

@@ -11,7 +11,11 @@ class DatabaseSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		// \App\Models\User::factory(10)->create();
-		   \App\Models\Pegawai::factory(10)->create();
+		\App\Models\User::factory(1)->create();
+		//    \App\Models\Pegawai::factory(10)->create();
+
+		//pegawai import
+		\Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\PegawaisImport, \Illuminate\Support\Facades\Storage::path('seeder/pegawai-import22.xlsx'));
+
 	}
 }

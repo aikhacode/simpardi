@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\Pegawai;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PegawaisImport implements ToModel {
+class PegawaisImport implements ToModel, WithHeadingRow {
 	/**
 	 * @param array $row
 	 *
@@ -13,23 +14,23 @@ class PegawaisImport implements ToModel {
 	 */
 	public function model(array $row) {
 		return new Pegawai([
-			'nik' => $row[0],
-			'nip' => $row[1],
-			'nama' => $row[2],
-			'sex' => $row[3],
-			'status' => $row[4],
-			'pangkat' => $row[5],
-			'gol' => $row[6],
-			'jabatan_anjab' => $row[7],
-			'tmt_skcpns' => $row[8],
-			'tmt_pensiun' => $row[9],
-			'pendidikan' => $row[10],
-			'perguruan_tinggi' => $row[11],
-			'tahun_lulus' => $row[12],
-			'sip_sik' => $row[13],
-			'tgl_sipsik' => $row[14],
-			'no_str' => $row[15],
-			'tgl_str' => $row[16],
+			'nik' => $row['nik'],
+			'nip' => $row['nip'],
+			'nama' => "{$row['nama']}",
+			'sex' => $row['sex'],
+			'status' => $row['status'],
+			'pangkat' => $row['pangkat'],
+			'gol' => $row['gol'],
+			'jabatan_anjab' => $row['jabatan_anjab'],
+			'tmt_skcpns' => $row['tmt_skcpns'] == 0 ? null : $row['tmt_skcpns'],
+			'tmt_pensiun' => $row['tmt_pensiun'] == 0 ? null : $row['tmt_pensiun'],
+			'pendidikan' => $row['pendidikan'],
+			'perguruan_tinggi' => $row['perguruan_tinggi'],
+			'tahun_lulus' => $row['tahun_lulus'],
+			'sip_sik' => $row['sip_sik'],
+			'tgl_sipsik' => $row['tgl_sipsik'] == 0 ? null : $row['tgl_sipsik'],
+			'no_str' => $row['no_str'],
+			'tgl_str' => $row['tgl_str'] == 0 ? null : $row['tgl_str'],
 		]);
 	}
 }
