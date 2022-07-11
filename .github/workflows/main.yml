@@ -22,3 +22,6 @@ jobs:
           **/vendor/**
           **/resources/app/dist/**
           **/resources/app/node_modules/**
+          **/public/arsip/**
+          **/storage/app/**
+
