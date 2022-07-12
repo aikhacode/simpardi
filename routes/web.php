@@ -30,9 +30,10 @@ Route::get('upload/arsip', function (Request $request) {
 
 	// return response($arsip);
 	if ($arsip) {
-		$path = storage_path($storagepath);
+		$path = storage_path('app/' . $storagepath);
 
-		if (!File::exists($path)) {
+		if (!file_exists($path)) {
+
 			abort(404);
 
 		}
