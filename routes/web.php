@@ -38,8 +38,8 @@ Route::get('upload/arsip', function (Request $request) {
 
 		}
 
-		return response()->download($path, $arsip[0]->filename);
-		// return response()->file($path);
+		// return response()->download($path, $arsip[0]->filename);
+		return response()->file($path);
 	} else {
 		abort(404);
 
