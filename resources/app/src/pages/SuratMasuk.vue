@@ -316,7 +316,7 @@
                   <InputText id="disposisi" v-model.trim="Surat.disposisi" autofocus />
 
                   <Button
-                    @click="doDisposisi(slotProps.data)"
+                    @click="doDisposisi(Surat)"
                     :disabled="!editMode"
                     class="font-medium p-button-raised ml-3 w-15rem p-button-danger"
                     >Buat Disposisi
