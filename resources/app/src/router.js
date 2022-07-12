@@ -3,6 +3,8 @@ import App from "./App.vue";
 import { useStore } from "./store.js";
 import SuratKeluar from "./pages/SuratKeluar.vue"
 import SuratMasuk from "./pages/SuratMasuk.vue"
+import DokumentInternal from "./pages/DokumentInternal.vue"
+import DokumentEksternal from "./pages/DokumentEksternal.vue"
 
 const routes = [
     {
@@ -21,12 +23,12 @@ const routes = [
                 component: () => import("./components/Dashboard.vue"),
                 meta: { requiresAuth: true },
             },
-            {
-                path: "/history",
-                name: "history",
-                component: () => import("./components/History.vue"),
-                meta: { requiresAuth: true },
-            },
+            // {
+            //     path: "/history",
+            //     name: "history",
+            //     component: () => import("./components/History.vue"),
+            //     meta: { requiresAuth: true },
+            // },
             {
                 path: "/data-user",
                 name: "datauser",
@@ -42,13 +44,15 @@ const routes = [
             {
                 path: "/dokument-internal",
                 name: "dokumentinternal",
-                component: () => import("./pages/DokumentInternal.vue"),
+                // component: () => import("./pages/DokumentInternal.vue"),
+                component: DokumentInternal,
                 meta: { requiresAuth: true },
             },
             {
                 path: "/dokument-eksternal",
                 name: "dokumenteksternal",
-                component: () => import("./pages/DokumentEksternal.vue"),
+                // component: () => import("./pages/DokumentEksternal.vue"),
+                component: DokumentEksternal,
                 meta: { requiresAuth: true },
             },
             {

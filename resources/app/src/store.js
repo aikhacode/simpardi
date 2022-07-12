@@ -48,6 +48,33 @@ export const useStore = defineStore("main", {
         isLoggedIn() {
             return this.authenticated;
         },
+        async getElementCount(element,elementVar){
+              let api = this.parseApi();
+            let headersList = {
+                "Accept": "application/json",
+                // "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+                "Authorization": `Bearer ${this.token}` 
+               }
+            let reqOptions = {
+                url: this.parseApi()+element,
+                method: "GET",
+                headers: headersList,
+              }
+              
+            try {
+                let res = await axios.request(reqOptions)
+                // console.log(res.data);
+                elementVar.count = res.data.length
+                
+                return {
+                    
+                    count: res.data.length
+                }
+            } catch (err) {
+                console.log(err.response.status);
+                return false
+            }
+        },
         async getPegawai(){
             let api = this.parseApi();
             let headersList = {

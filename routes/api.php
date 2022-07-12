@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArsipPegawaiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\SuratMasukController;
@@ -121,6 +122,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/suratmasuk/{id}', [SuratMasukController::class, 'update']);
 	Route::delete('/suratmasuk/{id}', [SuratMasukController::class, 'destroy']);
 	Route::post('/suratmasuk/disposisi/{id}', [SuratMasukController::class, 'disposisiStore']);
+
+	// internal | eksternal
+	Route::get('/document/{type}', [DocumentController::class, 'index']);
+	Route::post('/document/{type}', [DocumentController::class, 'store']);
+	Route::post('/document/{type}/{id}', [DocumentController::class, 'update']);
+	Route::delete('/document/{type}/{id}', [DocumentController::class, 'destroy']);
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

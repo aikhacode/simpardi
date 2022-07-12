@@ -300,6 +300,19 @@ export default {
 	productService: null,
 	themeChangeListener: null,
 	mounted() {
+		Promise.all([
+			this.store.getPegawai(),
+			this.store.getElementCount('/document/internal',this.store.document.internal),
+			 this.store.getElementCount('/document/eksternal',this.store.document.external),
+			 this.store.getElementCount('/suratmasuk',this.store.mail.inbox),
+			 this.store.getElementCount('/suratkeluar',this.store.mail.outbox)
+			])
+		// await this.store.getPegawai()
+		// await this.store.getElementCount('/document/internal',this.store.document.internal)
+		// await this.store.getElementCount('/document/eksternal',this.store.document.external)
+		// await this.store.getElementCount('/suratmasuk',this.store.mail.inbox)
+		// await this.store.getElementCount('/suratkeluar',this.store.mail.outbox)
+
 		this.productService.getProductsSmall().then(data => this.products = data);
 
 		this.themeChangeListener = (event) => {
@@ -323,7 +336,7 @@ export default {
 	async created() {
 		this.productService = new ProductService();
 
-		await this.store.getPegawai()
+		
 
 	},
 	methods: {

@@ -48,7 +48,7 @@ export default {
                     items: [{
                         label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/dashboard'
                     },
-                     {label: 'History', icon: 'pi pi-fw pi-list', to: '/history'},
+                    
                      ]
                 },
 				{

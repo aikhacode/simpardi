@@ -21,7 +21,7 @@ class SuratMasukController extends Controller {
 			// code...
 			$key->tgl_surat = \Carbon\Carbon::parse($key->tgl_surat)->format('d-m-Y');
 			$key->tgl_surat_masuk = \Carbon\Carbon::parse($key->tgl_surat_masuk)->format('d-m-Y');
-			$a = $key->disposisi;
+			$a = $key->disposisis;
 			$b = $key->arsips;
 		}
 

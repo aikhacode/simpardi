@@ -143,7 +143,17 @@
             <template #body="slotProps">
               <span class="p-column-title">Disposisi</span>
               {{ slotProps.data.disposisi }}
+              
             </template>
+          </Column>
+
+          <Column header="Status Disposisi"
+            field="status_disposisi"
+            :sortable="true" headerStyle="min-width:10rem;">
+            <template #body="slotProps">
+               <Button type="button" :label="(slotProps.data.status_disposisi) ? 'SUDAH' : 'BELUM'"  :class="{'p-button-success': (slotProps.data.status_disposisi),'p-button-danger':(!slotProps.data.status_disposisi)}"  />
+            </template>
+
           </Column>
 
           <Column headerStyle="min-width:10rem;">
@@ -306,7 +316,7 @@
                   <InputText id="disposisi" v-model.trim="Surat.disposisi" autofocus />
 
                   <Button
-                    @click="doDisposisi()"
+                    @click="doDisposisi(slotProps.data)"
                     :disabled="!editMode"
                     class="font-medium p-button-raised ml-3 w-15rem p-button-danger"
                     >Buat Disposisi
@@ -824,7 +834,8 @@ export default {
     parseArsipUrls(filename_storagepath) {
       return parseArsipUrl(filename_storagepath);
     },
-    doDisposisi() {
+    doDisposisi(Surat) {
+    	this.Surat = Surat
       this.SuratDisposisi = {
         dari:this.Surat.pengirim,
         tgl_surat:this.Surat.tgl_surat,
@@ -857,6 +868,7 @@ export default {
               Authorization: `Bearer ${useStore().token}`,
             },
           }).then((res) => {
+
             console.log("save", res.data);
             window.open(`${location.protocol}//${location.hostname}/print/disposisi/${this.Surat.id}`, "_blank")
             // this.disposisiDialogs = false;
