@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Arsip;
-use App\Models\SuratMasuk;
 use App\Models\Disposisi;
+use App\Models\SuratMasuk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,7 +19,8 @@ class SuratMasukController extends Controller {
 
 		foreach ($res as &$key) {
 			// code...
-			// $key->tgl_surat = \Carbon\Carbon::parse($key->tgl_surat)->format('d-m-Y');
+			$key->tgl_surat = \Carbon\Carbon::parse($key->tgl_surat)->format('d-m-Y');
+			$key->tgl_surat_masuk = \Carbon\Carbon::parse($key->tgl_surat_masuk)->format('d-m-Y');
 			$a = $key->disposisi;
 			$b = $key->arsips;
 		}
@@ -102,7 +103,7 @@ class SuratMasukController extends Controller {
 	 * @param  \App\Models\SuratMasuk  $suratMasuk
 	 * @return \Illuminate\Http\Response
 	 */
-	public function disposisiStore(Request $request,$id) {
+	public function disposisiStore(Request $request, $id) {
 		$fields = $request->all();
 		$surat = SuratMasuk::find($id);
 		$surat->disposisi;
@@ -114,12 +115,12 @@ class SuratMasukController extends Controller {
 		$disposisi->perihal = $fields['perihal'];
 		$disposisi->no_agenda = $fields['no_agenda'];
 		$disposisi->tgl_terima = $fields['tgl_terima'];
-		Disposisi::where('no_surat',$fields['no_surat'])->where('disposisiable_type','App\Models\SuratMasuk')->delete();
+		Disposisi::where('no_surat', $fields['no_surat'])->where('disposisiable_type', 'App\Models\SuratMasuk')->delete();
 		$res = $surat->disposisis()->save($disposisi);
-		
+
 		$a = $surat->disposisis;
-		
-		return response($surat,200);
+
+		return response($surat, 200);
 
 	}
 
