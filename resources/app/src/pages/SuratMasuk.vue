@@ -868,7 +868,11 @@ export default {
               Authorization: `Bearer ${useStore().token}`,
             },
           }).then((res) => {
-
+            this.SuratService.getSurats().then((data) => {
+              this.Surats = data;
+              console.log(this.Surats);
+            });
+            this.disposisiDialogs = false;
             console.log("save", res.data);
             window.open(`${location.protocol}//${location.hostname}/print/disposisi/${this.Surat.id}`, "_blank")
             // this.disposisiDialogs = false;
