@@ -3,16 +3,16 @@
         <div class="col-12">
             <div class="card">
                 <Toast />
-                <Toolbar class="mb-4">
+                <!-- <Toolbar class="mb-4">
                     <template v-slot:start>
-                        <div class="my-2">
-                            <Button
+                        <div class="my-2"> -->
+                            <!-- <Button
                                 label="New"
                                 icon="pi pi-plus"
                                 class="p-button-success mr-2"
                                 @click="openNew"
-                            />
-                            <Button
+                            /> -->
+                            <!-- <Button
                                 label="Delete"
                                 icon="pi pi-trash"
                                 class="p-button-danger"
@@ -21,24 +21,24 @@
                                     !selectedProducts ||
                                     !selectedProducts.length
                                 "
-                            />
-                        </div>
+                            /> -->
+                      <!--   </div>
                     </template>
 
-                    <template v-slot:end>
+                    <template v-slot:end> -->
                         <!-- <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" /> -->
-                        <Button
+                       <!--  <Button
                             label="Export"
                             icon="pi pi-upload"
                             class="p-button-help"
                             @click="exportCSV($event)"
-                        />
-                    </template>
-                </Toolbar>
+                        /> -->
+                   <!--  </template>
+                </Toolbar> -->
 
                 <DataTable
                     ref="dt"
-                    :value="products"
+                    :value="store.pegawai.data"
                     v-model:selection="selectedProducts"
                     dataKey="id"
                     :paginator="true"
@@ -46,7 +46,7 @@
                     :filters="filters"
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                     :rowsPerPageOptions="[5, 10, 25]"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} pegawai"
                     responsiveLayout="scroll"
                 >
                     <template #header>
@@ -64,52 +64,10 @@
                         </div>
                     </template>
 
-                    <Column
+                    <!-- <Column
                         selectionMode="multiple"
                         headerStyle="width: 3rem"
-                    ></Column>
-                    <!-- <Column field="code" header="Code" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-						<template #body="slotProps">
-							<span class="p-column-title">Code</span>
-							{{slotProps.data.code}}
-						</template>
-					</Column>
-					<Column field="name" header="Name" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-						<template #body="slotProps">
-							<span class="p-column-title">Name</span>
-							{{slotProps.data.name}}
-						</template>
-					</Column>
-					<Column header="Image" headerStyle="width:14%; min-width:10rem;">
-						<template #body="slotProps">
-							<span class="p-column-title">Image</span>
-							<img :src="'images/product/' + slotProps.data.image" :alt="slotProps.data.image" class="shadow-2" width="100" />
-						</template>
-					</Column>
-					<Column field="price" header="Price" :sortable="true" headerStyle="width:14%; min-width:8rem;">
-						<template #body="slotProps">
-							<span class="p-column-title">Price</span>
-							{{formatCurrency(slotProps.data.price)}}
-						</template>
-					</Column>
-					<Column field="category" header="Category" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-						<template #body="slotProps">
-							<span class="p-column-title">Category</span>
-							{{formatCurrency(slotProps.data.category)}}
-						</template>
-					</Column>
-					<Column field="rating" header="Reviews" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-						<template #body="slotProps">
-							<span class="p-column-title">Rating</span>
-							<Rating :modelValue="slotProps.data.rating" :readonly="true" :cancel="false" />
-						</template>
-					</Column>
-					<Column field="inventoryStatus" header="Status" :sortable="true" headerStyle="width:14%; min-width:10rem;">
-						<template #body="slotProps">
-							<span class="p-column-title">Status</span>
-							<span :class="'product-badge status-' + (slotProps.data.inventoryStatus ? slotProps.data.inventoryStatus.toLowerCase() : '')">{{slotProps.data.inventoryStatus}}</span>
-						</template>
-					</Column> -->
+                    ></Column> -->
 
 					
 
@@ -173,7 +131,7 @@
                             <Button
                                 icon="pi pi-pencil"
                                 class="p-button-rounded p-button-success mr-2"
-                                @click="editProduct(slotProps.data)"
+                                @click="$router.push({path:'/pegawai/'+slotProps.data.id})"
                             />
                             <Button
                                 icon="pi pi-trash"
@@ -186,169 +144,6 @@
                    
                 </DataTable>
 
-                <Dialog
-                    v-model:visible="productDialog"
-                    :style="{ width: '450px' }"
-                    header="Data Pegawai"
-                    :modal="true"
-                    class="p-fluid"
-                >
-                    <img
-                        :src="'images/product/' + product.image"
-                        :alt="product.image"
-                        v-if="product.image"
-                        width="150"
-                        class="mt-0 mx-auto mb-5 block shadow-2"
-                    />
-                    <div class="field">
-                        <label for="name">Nama</label>
-                        <InputText
-                            id="name"
-                            v-model.trim="product.nama"
-                            required="true"
-                            autofocus
-                            :class="{ 'p-invalid': submitted && !product.name }"
-                        />
-                        <small
-                            class="p-invalid"
-                            v-if="submitted && !product.name"
-                            >Nama is required.</small
-                        >
-                    </div>
-                    <div class="field">
-                        <label for="description">Description</label>
-                        <Textarea
-                            id="description"
-                            v-model="product.description"
-                            required="true"
-                            rows="3"
-                            cols="20"
-                        />
-                    </div>
-
-                    <div class="field">
-                        <label for="inventoryStatus" class="mb-3"
-                            >Inventory Status</label
-                        >
-                        <Dropdown
-                            id="inventoryStatus"
-                            v-model="product.inventoryStatus"
-                            :options="statuses"
-                            optionLabel="label"
-                            placeholder="Select a Status"
-                        >
-                            <template #value="slotProps">
-                                <div
-                                    v-if="
-                                        slotProps.value && slotProps.value.value
-                                    "
-                                >
-                                    <span
-                                        :class="
-                                            'product-badge status-' +
-                                            slotProps.value.value
-                                        "
-                                        >{{ slotProps.value.label }}</span
-                                    >
-                                </div>
-                                <div
-                                    v-else-if="
-                                        slotProps.value &&
-                                        !slotProps.value.value
-                                    "
-                                >
-                                    <span
-                                        :class="
-                                            'product-badge status-' +
-                                            slotProps.value.toLowerCase()
-                                        "
-                                        >{{ slotProps.value }}</span
-                                    >
-                                </div>
-                                <span v-else>
-                                    {{ slotProps.placeholder }}
-                                </span>
-                            </template>
-                        </Dropdown>
-                    </div>
-
-                    <div class="field">
-                        <label class="mb-3">Category</label>
-                        <div class="formgrid grid">
-                            <div class="field-radiobutton col-6">
-                                <RadioButton
-                                    id="category1"
-                                    name="category"
-                                    value="Accessories"
-                                    v-model="product.category"
-                                />
-                                <label for="category1">Accessories</label>
-                            </div>
-                            <div class="field-radiobutton col-6">
-                                <RadioButton
-                                    id="category2"
-                                    name="category"
-                                    value="Clothing"
-                                    v-model="product.category"
-                                />
-                                <label for="category2">Clothing</label>
-                            </div>
-                            <div class="field-radiobutton col-6">
-                                <RadioButton
-                                    id="category3"
-                                    name="category"
-                                    value="Electronics"
-                                    v-model="product.category"
-                                />
-                                <label for="category3">Electronics</label>
-                            </div>
-                            <div class="field-radiobutton col-6">
-                                <RadioButton
-                                    id="category4"
-                                    name="category"
-                                    value="Fitness"
-                                    v-model="product.category"
-                                />
-                                <label for="category4">Fitness</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="formgrid grid">
-                        <div class="field col">
-                            <label for="price">Price</label>
-                            <InputNumber
-                                id="price"
-                                v-model="product.price"
-                                mode="currency"
-                                currency="USD"
-                                locale="en-US"
-                            />
-                        </div>
-                        <div class="field col">
-                            <label for="quantity">Quantity</label>
-                            <InputNumber
-                                id="quantity"
-                                v-model="product.quantity"
-                                integeronly
-                            />
-                        </div>
-                    </div>
-                    <template #footer>
-                        <Button
-                            label="Cancel"
-                            icon="pi pi-times"
-                            class="p-button-text"
-                            @click="hideDialog"
-                        />
-                        <Button
-                            label="Save"
-                            icon="pi pi-check"
-                            class="p-button-text"
-                            @click="saveProduct"
-                        />
-                    </template>
-                </Dialog>
 
                 <Dialog
                     v-model:visible="deleteProductDialog"
@@ -421,7 +216,7 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
-import ProductService from "../service/ProductService.js";
+import ProductService from "../service/PegawaiService.js";
 import { useStore } from "@/store.js";
 
 export default {
@@ -452,6 +247,7 @@ export default {
     },
     mounted() {
         // this.productService.getProducts().then(data => this.products = data);
+        Promise.all([this.store.getPegawai()])
         this.products = this.store.pegawai.data;
 		
 		if (this.products.length>0) {
@@ -459,13 +255,13 @@ export default {
 			console.log('before',this.columnKeyDisplay);
 
 			this.columnKeyDisplay = this.columnKeyDisplay.filter((valKey) => {
-                return valKey!='nama' && valKey!='id' && valKey!='created_at' && valKey!='updated_at'  
+                return valKey!='nama' && valKey!='id' && valKey!='created_at' && valKey!='updated_at' && valKey!='avatar' 
 			}).map(valCKD => {
 				
 				return {
 					title: valCKD.charAt(0).toUpperCase() + valCKD.slice(1),
 					field: valCKD,
-					type: (valCKD == 'tmt_skcpns') || (valCKD == 'tmt_pensiun') || (valCKD == 'tgl_sipsik') || (valCKD == 'tgl_str') ? 'dateTime' : 'default',
+					type: (valCKD == 'tmt_skcpns') || (valCKD == 'tmt_pensiun') || (valCKD == 'tgl_sip_sipb') || (valCKD == 'tgl_sip_sipb_berlaku') || (valCKD == 'tgl_str') || (valCKD == 'tgl_str_berlaku') ? 'dateTime' : 'default',
 					formatData: this.formatDataValue
 				}
 
@@ -502,7 +298,7 @@ export default {
         openNew() {
             this.product = {};
             this.submitted = false;
-            this.productDialog = true;
+            // this.$router.push(path:'/pegawai/new')
         },
         hideDialog() {
             this.productDialog = false;
@@ -552,17 +348,22 @@ export default {
             this.deleteProductDialog = true;
         },
         deleteProduct() {
-            this.products = this.products.filter(
-                (val) => val.id !== this.product.id
-            );
-            this.deleteProductDialog = false;
-            this.product = {};
-            this.$toast.add({
-                severity: "success",
-                summary: "Successful",
-                detail: "Product Deleted",
-                life: 3000,
-            });
+
+            // this.products = this.products.filter(
+            //     (val) => val.id !== this.product.id
+            // );
+            this.productService.deletePegawai(this.product).then((res)=>{
+               this.deleteProductDialog = false;
+                this.product = {};
+                this.$toast.add({
+                    severity: "success",
+                    summary: "Successful",
+                    detail: "Product Deleted",
+                    life: 3000,
+                });
+                useStore().getPegawai()
+            })
+            
         },
         findIndexById(id) {
             let index = -1;
@@ -590,17 +391,11 @@ export default {
             this.deleteProductsDialog = true;
         },
         deleteSelectedProducts() {
-            this.products = this.products.filter(
-                (val) => !this.selectedProducts.includes(val)
-            );
-            this.deleteProductsDialog = false;
-            this.selectedProducts = null;
-            this.$toast.add({
-                severity: "success",
-                summary: "Successful",
-                detail: "Products Deleted",
-                life: 3000,
-            });
+            // this.products = this.products.filter(
+            //     (val) => !this.selectedProducts.includes(val)
+            // );
+
+            
         },
         initFilters() {
             this.filters = {

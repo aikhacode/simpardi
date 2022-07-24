@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArsipPegawaiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\SuratKeluarController;
@@ -128,6 +129,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::post('/document/{type}', [DocumentController::class, 'store']);
 	Route::post('/document/{type}/{id}', [DocumentController::class, 'update']);
 	Route::delete('/document/{type}/{id}', [DocumentController::class, 'destroy']);
+
+	Route::get('/categories', [CategoryController::class, 'index']);
+	Route::post('/categories', [CategoryController::class, 'create']);
+	Route::put('/categories/{id}', [CategoryController::class, 'update']);
+	Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
 
 });
 

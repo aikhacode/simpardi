@@ -5,6 +5,8 @@ import SuratKeluar from "./pages/SuratKeluar.vue"
 import SuratMasuk from "./pages/SuratMasuk.vue"
 import DokumentInternal from "./pages/DokumentInternal.vue"
 import DokumentEksternal from "./pages/DokumentEksternal.vue"
+import DataPegawai from "@/pages/DataPegawai.vue"
+// import Pegawai from "@/pages/Pegawai.vue"
 
 const routes = [
     {
@@ -38,7 +40,29 @@ const routes = [
             {
                 path: "/data-pegawai",
                 name: "datapegawai",
-                component: () => import("./pages/DataPegawai.vue"),
+                // component: () => import("./pages/DataPegawai.vue"),
+                component: DataPegawai,
+                meta: { requiresAuth: true },
+            },
+            {
+                path: "/pegawai/:id",
+                name: "datapegawaiedit",
+                component: () => import("./pages/Pegawai.vue"),
+                props: true,
+                meta: { requiresAuth: true },
+            },
+             {
+                path: "/categories",
+                name: "categories",
+                component: () => import("./pages/Category.vue"),
+                // props: true,
+                meta: { requiresAuth: true },
+            },
+            {
+                path: "/categories/:id",
+                name: "categoriesedit",
+                component: () => import("./pages/CategoryEdit.vue"),
+                props: true,
                 meta: { requiresAuth: true },
             },
             {

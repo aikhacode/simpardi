@@ -1,6 +1,10 @@
-function parseApi(namespace='')
-{
-    return `${location.protocol}//${location.hostname}/api${namespace}`
+const parseApi = (namespace="") => {
+
+	return (location.hostname == 'simpardi.test') ? `//simpardi.test/api${namespace}` : `../api${namespace}`;
+}
+
+const parseWeb = (namespace="") => {
+	return (location.hostname == 'simpardi.test') ? `//simpardi.test${namespace}` : `..${namespace}`;
 }
 
 function console_log(x)
@@ -8,12 +12,15 @@ function console_log(x)
     console.log({x})
 }
 
+
 function parseArsipUrl(filename)
 {
-
-    return `//${location.hostname}/upload/arsip?arsip=${window.btoa(filename)}`
+	return (location.hostname == 'simpardi.test') ? `/upload/arsip?arsip=${window.btoa(filename)}` : `../upload/arsip?arsip=${window.btoa(filename)}`;
+    
 }
 
-export { parseApi,console_log,parseArsipUrl}
 
+export {
+	parseApi, parseWeb,console_log,parseArsipUrl
+}
 

@@ -16,11 +16,10 @@ class Pegawai extends Model {
 	protected $fillable = [
 		'nik', 'nip', 'nama', 'sex', 'status', 'pangkat', 'gol', 'jabatan_anjab',
 		'tmt_skcpns', 'tmt_pensiun', 'pendidikan', 'perguruan_tinggi',
-		'tahun_lulus', 'sip_sik', 'tgl_sipsik', 'no_str', 'tgl_str',
+		'tahun_lulus', 'sip_sipb', 'tgl_sip_sipb', 'tgl_sip_sipb_berlaku', 'no_str', 'tgl_str', 'tgl_str_berlaku',
 	];
 
-	public function arsips()
-	{
-		return $this->hasMany(ArsipPegawai::class,'pegawai_id');
+	public function arsips() {
+		return $this->hasMany(ArsipPegawai::class, 'pegawai_id');
 	}
 }

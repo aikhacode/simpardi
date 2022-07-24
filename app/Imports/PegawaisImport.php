@@ -27,10 +27,12 @@ class PegawaisImport implements ToModel, WithHeadingRow {
 			'pendidikan' => $row['pendidikan'],
 			'perguruan_tinggi' => $row['perguruan_tinggi'],
 			'tahun_lulus' => $row['tahun_lulus'],
-			'sip_sik' => $row['sip_sik'],
-			'tgl_sipsik' => $row['tgl_sipsik'] == 0 ? null : $row['tgl_sipsik'],
+			'sip_sipb' => $row['sip_sipb'],
+			'tgl_sip_sipb' => $row['tgl_sip_sipb'] == 0 ? null : $row['tgl_sip_sipb'],
+			'tgl_sip_sipb_berlaku' => $row['tgl_sip_sipb_berlaku'] == 0 ? null : $row['tgl_sip_sipb_berlaku'],
 			'no_str' => $row['no_str'],
 			'tgl_str' => $row['tgl_str'] == 0 ? null : $row['tgl_str'],
+			'tgl_str_berlaku' => $row['tgl_str_berlaku'] == 0 ? null : $row['tgl_str_berlaku'],
 		]);
 	}
 }
