@@ -16,6 +16,7 @@ export const useStore = defineStore("main", {
                 data: {
                     role: "Admin",
                 },
+
             },
             pegawai: {
                 count: 0,
@@ -41,10 +42,17 @@ export const useStore = defineStore("main", {
                     data:[]
                 },
             },
+            arsipsTemp:[],
            
         };
     },
     actions: {
+        isAdmin(){
+            return this.login.data.role == 'Admin'
+        },
+        isNotAdmin(){
+            return this.login.data.role != 'Admin'
+        },
         isLoggedIn() {
             return this.authenticated;
         },
@@ -114,6 +122,10 @@ export const useStore = defineStore("main", {
                 console.log(res.data);
                 this.authenticated = true;
                 this.token = res.data.token;
+                 this.login.userName = res.data.user.name;
+                this.login.email = res.data.user.email;
+                this.login.userId = res.data.user.id;
+                this.login.data.role = res.data.user.role;
             } catch (err) {
                 console.log(err.response.status);
                 this.authenticated = false;

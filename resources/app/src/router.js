@@ -66,6 +66,13 @@ const routes = [
                 meta: { requiresAuth: true },
             },
             {
+                path: "/view-upload",
+                name: "previewupload",
+                component: () => import("./pages/PreviewUploads.vue"),
+                // component: DokumentInternal,
+                meta: { requiresAuth: true },
+            },
+            {
                 path: "/dokument-internal",
                 name: "dokumentinternal",
                 // component: () => import("./pages/DokumentInternal.vue"),

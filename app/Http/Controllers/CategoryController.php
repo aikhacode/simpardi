@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller {
 	public function index() {
-		return \App\Models\Category::all();
+		return \App\Models\Category::orderBy('type')->get();
+	}
+
+	public function byType($type) {
+		return \App\Models\Category::where('type', $type)->get();
 	}
 
 	public function create(Request $request) {

@@ -13,7 +13,7 @@ class CreateDocumentsTable extends Migration {
 	public function up() {
 		Schema::create('documents', function (Blueprint $table) {
 			$table->id();
-			$table->string('type')->default('internal'); // eksternal
+			$table->string('type')->default('INTERNAL'); // eksternal
 			$table->string('tahun')->default('2022');
 			// sk , sop , dlll
 			$table->string('category');

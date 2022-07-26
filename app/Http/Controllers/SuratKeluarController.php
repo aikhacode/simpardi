@@ -34,6 +34,12 @@ class SuratKeluarController extends Controller {
 		return $res;
 	}
 
+	public function agenda_nok() {
+		$res = SuratKeluar::selectRaw('MAX(id) as max')->get();
+
+		return response($res);
+	}
+
 	/**
 	 * Store a newly created resource in storage.
 	 *

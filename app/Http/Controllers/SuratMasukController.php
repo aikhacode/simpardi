@@ -28,6 +28,12 @@ class SuratMasukController extends Controller {
 		return $res;
 	}
 
+	public function agenda_no() {
+		$res = SuratMasuk::selectRaw('MAX(id) as max')->get();
+
+		return response($res);
+	}
+
 	/**
 	 * Show the form for creating a new resource.
 	 *

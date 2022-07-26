@@ -12,32 +12,11 @@
                 class="p-button-success mr-2"
                 @click="openNew"
               />
-              <Button
-                label="Delete"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedDocuments || !selectedDocuments.length"
-              />
+           
             </div>
           </template>
 
-          <template v-slot:end>
-            <!-- <FileUpload
-                            mode="basic"
-                            accept="image/*"
-                            :maxFileSize="1000000"
-                            label="Import"
-                            chooseLabel="Import"
-                            class="mr-2 inline-block"
-                        /> -->
-            <Button
-              label="Export"
-              icon="pi pi-upload"
-              class="p-button-help"
-              @click="exportCSV($event)"
-            />
-          </template>
+         
         </Toolbar>
 
         <DataTable
@@ -57,7 +36,7 @@
             <div
               class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
             >
-              <h5 class="m-0">Manage Document eksternal</h5>
+              <h5 class="m-0">Manage Document Eksternal</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText v-model="filters['global'].value" placeholder="Search..." />
@@ -65,7 +44,13 @@
             </div>
           </template>
 
-          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+          <!-- <Column selectionMode="multiple" headerStyle="width: 3rem"></Column> -->
+          <Column
+            field="tahun"
+            header="Tahun"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          />
           <Column
             field="category"
             header="Kategori"
@@ -110,8 +95,22 @@
               {{ slotProps.data.no_sk }}
             </template>
           </Column>
-          
-          <Column headerStyle="min-width:10rem;">
+
+          <Column
+              header="Upload"
+              headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              
+              <Button v-if="slotProps.data.arsips.length"
+                label="Ada"
+                class="p-button-success mr-2"
+                @click="onUploadClickAtTable(slotProps.data)"
+              />
+            </template>
+          </Column>
+
+          <Column header="Action" headerStyle="min-width:10rem;">
             <template #body="slotProps">
               <Button
                 icon="pi pi-pencil"
@@ -122,6 +121,7 @@
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-warning mt-2"
                 @click="confirmDeleteDocument(slotProps.data)"
+                :disabled="store.isNotAdmin()"
               />
             </template>
           </Column>
@@ -130,19 +130,35 @@
         <Dialog
           v-model:visible="DocumentDialog"
           :style="{ width: '1024px' }"
-          header="Document eksternal Details"
+          header="Document Eksternal Details"
           :modal="true"
           class="p-fluid"
         >
           <!-- <img :src="'images/Document/' + Document.image" :alt="Document.image" v-if="Document.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" /> -->
           <div class="formgrid grid">
             <div class="field col-12 md:col-6">
+              <label for="tahun" class="mb-3">Tahun</label>
+              <Dropdown
+                id="tahun"
+
+                v-model="editPickExtra.tahun"
+                :options="optionsTahun"
+                optionLabel="label"
+                optionValur='value'
+                placeholder="Pilih Tahun"
+                @change="onTahunChange"
+              >
+                
+              </Dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
               <label for="categoryDocument" class="mb-3">Kategori (Pilih kategori untuk bantu isi kategory dokument, bila tidak ada diisi sendiri.)</label>
               <Dropdown
                 id="categoryDocument"
-                v-model="Document.categoryDocument"
+                v-model="editPickExtra.categoryDocument"
                 :options="categoryDocument"
                 optionLabel="label"
+                optionValur='value'
                 placeholder="Pilih Kategori Document (SOP TU/GIZI dll)"
                 @change="onCategoryDocumentChange"
               >
@@ -356,7 +372,8 @@ import { FilterMatchMode } from "primevue/api";
 import DocumentService from "../service/DocumentEksternalService.js";
 import { useStore } from "@/store.js";
 import axios from "axios";
-import { parseArsipUrl } from "@/helper.js";
+import { parseArsipUrl,dayjs } from "@/helper.js";
+
 
 
 export default {
@@ -365,6 +382,7 @@ export default {
   },
   data() {
     return {
+      store:useStore(),
       Documents: null,
       DocumentDialog: false,
       deleteDocumentDialog: false,
@@ -373,6 +391,18 @@ export default {
       selectedDocuments: null,
       filters: {},
       submitted: false,
+      editPickExtra:{
+        tahun: {label:'2022',value:'2022'},
+        categoryDocument:{label:'PEDOMAN',value:'PEDOMAN'},
+      },
+      optionsTahun:[
+        { label: "2020", value: "2020" },
+        { label: "2021", value: "2021" },
+        { label: "2022", value: "2022" },
+        { label: "2023", value: "2023" },
+        { label: "2024", value: "2024" },
+        { label: "2025", value: "2025" },
+      ],
       categoryDocument: [
         { label: "SOP TU", value: "SOP TU" },
         { label: "SOP GIGI", value: "SOP GIGI" },
@@ -410,11 +440,23 @@ export default {
     },
     openNew() {
       this.Document = {
-        no_Document: "445/   /403.103.17/2022",
+        
+        // no_Document: "445/   /403.103.17/2022",
         arsips: [],
+
       };
+
       this.submitted = false;
       this.editMode = false;
+      this.DocumentService.getCategory().then((res)=>{
+        console.log('cat',res)
+        this.categoryDocument = res.map((item)=>{
+           return {
+            label:item.category,
+            value:item.category
+           }
+        }) 
+      })
       this.DocumentDialog = true;
     },
     hideDialog() {
@@ -425,6 +467,7 @@ export default {
     },
     validateInput() {
       let Document = this.Document;
+
       return (
         Document.tgl_terbit &&
         Document.title &&
@@ -436,19 +479,38 @@ export default {
       this.submitted = true;
 
       if (this.validateInput()){
-        
+          
           let url_save = useStore().parseApi("/document/eksternal");
+          let tgl_terbit_save;
+
+          console.log('before',this.Document.tgl_terbit)
+          
+          if (this.Document.tgl_terbit instanceof Date) {
+              tgl_terbit_save = dayjs(this.Document.tgl_terbit).format('YYYY-MM-DD')
+          } else {
+              tgl_terbit_save = dayjs(this.Document.tgl_terbit,'DD-MM-YYYY').format('YYYY-MM-DD')
+          }
+           
+         
+          console.log('validate',tgl_terbit_save)
+           
           if (this.editMode) {
+            // console.log('edit',tgl_terbit_save)
             url_save = useStore().parseApi("/document/eksternal/" + this.Document.id);
+            
+
+          } else{
+            // console.log('new',tgl_terbit_save)
+           
           }
           axios({
             method: "post",
             url: url_save,
             data: {
               arsips: this.Document.arsips,
-              tgl_terbit: new Date(this.Document.tgl_terbit).toISOString().slice(0, 10),
+              tgl_terbit: tgl_terbit_save,
               title: this.Document.title,
-              type: 'eksternal',
+              type: 'EKSTERNAL',
               category: this.Document.category,
               no_sk: this.Document.no_sk,
               
@@ -477,6 +539,9 @@ export default {
     },
     editDocument(Document) {
       this.Document = { ...Document };
+      console.log('editDoc',this.Document)
+      this.editPickExtra.tahun = { label:this.Document.tahun,value:this.Document.tahun}
+      this.editPickExtra.categoryDocument = { label:this.Document.category,value:this.Document.category}
       this.editMode = true;
       this.DocumentDialog = true;
     },
@@ -573,7 +638,7 @@ export default {
     onCategoryDocumentChange() {
     	console.log(this.Document.categoryDocument);
     	console.log(this.Document.category);
-        this.Document.category = this.Document.categoryDocument.value;
+        this.Document.category = this.editPickExtra.categoryDocument.value;
     },
     trimSpace(str) {
       return str.replace(" ", "");
@@ -613,6 +678,15 @@ export default {
     parseArsipUrls(filename_storagepath) {
       return parseArsipUrl(filename_storagepath);
     },
+    onTahunChange(e){
+      
+      console.log('tahun',this.Document.tahun)
+    },
+    onUploadClickAtTable(data){
+       useStore().arsipsTemp = data.arsips
+       console.log(useStore().arsipsTemp)
+       this.$router.push({path:'/view-upload'})
+    }
 
 
   },

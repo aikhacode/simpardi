@@ -93,6 +93,8 @@ import Tree from "primevue/tree";
 import TreeSelect from "primevue/treeselect";
 import TreeTable from "primevue/treetable";
 import TriStateCheckbox from "primevue/tristatecheckbox";
+import DialogService from 'primevue/dialogservice';
+import DynamicDialog from 'primevue/dynamicdialog';
 
 import CodeHighlight from "./AppCodeHighlight.js";
 import BlockViewer from "./BlockViewer.vue";
@@ -199,6 +201,9 @@ app.component("TreeTable", TreeTable);
 app.component("TriStateCheckbox", TriStateCheckbox);
 
 app.component("BlockViewer", BlockViewer);
+
+app.use(DialogService);
+app.component("DynamicDialog", DynamicDialog);
 
 app.mount("#app");
 

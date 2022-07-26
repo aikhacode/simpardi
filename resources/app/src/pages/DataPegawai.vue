@@ -132,11 +132,13 @@
                                 icon="pi pi-pencil"
                                 class="p-button-rounded p-button-success mr-2"
                                 @click="$router.push({path:'/pegawai/'+slotProps.data.id})"
+                                
                             />
                             <Button
                                 icon="pi pi-trash"
                                 class="p-button-rounded p-button-warning mt-2"
                                 @click="confirmDeleteProduct(slotProps.data)"
+                                :disabled="store.isNotAdmin()"
                             />
                         </template>
                     </Column>

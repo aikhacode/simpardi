@@ -50,8 +50,90 @@ Route::post('/import-xls', [PegawaiController::class, 'fileImport']);
 // id = arsipable_id
 // Route::delete('/arsip/{model}/{id}');
 
+Route::get('/upload/arsip', function (Request $request) {
+	$storagepath = base64_decode($request->input('arsip'));
+	// return $storagepath;
+
+	$arsip = Arsip::where('storagepath', $storagepath)->get();
+
+	// return response($arsip);
+	if ($arsip) {
+		$path = storage_path('app/' . $storagepath);
+
+		if (!file_exists($path)) {
+
+			response('no exist', 401);
+
+		}
+
+		// return response()->download($path, $arsip[0]->filename);
+		// $url = Storage::copy($path, public_path('arsip/' . $storagepath));
+		return response()->file($path);
+	} else {
+		response('no exist', 401);
+
+	}
+
+});
+
+Route::get('/suratkeluar/agendano', [SuratKeluarController::class, 'agenda_nok']);
+Route::get('/bro', [AuthController::class, 'index']);
+
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+	Route::delete('/bro/delete/{email}', function (Request $request, $email) {
+		$f = $request->all();
+		$usr = \App\Models\User::where('email', '=', $email)->delete();
+		return response([$usr, $email, $f]);
+
+	});
+	// Route::get('/bro', [AuthController::class, 'index']);
+	Route::post('/bro/update', function (Request $request) {
+		$request->validate([
+			'name' => 'required',
+			'email' => 'required|email',
+			'password' => 'required',
+			'password_confirmation' => 'required',
+			'role' => 'required',
+			'username' => 'required',
+		]);
+
+		$fields = $request->all();
+
+		$email = $fields['email'];
+
+		$data = ['name' => $fields['name'], 'username' => $fields['username'],
+			'password' => bcrypt($fields['password']),
+
+		];
+
+		if ($fields['mode'] == 'old') {
+
+			$user = DB::table("users")->where('email', '=', $email);
+
+			if (!empty($user)) {
+				$ret = true;
+				$user->update($data);
+
+			} else {
+				$ret = false;
+			}
+		} elseif ($fields['mode'] == 'new') {
+			$user = \App\Models\User::create([
+				'name' => $fields['name'],
+				'email' => $fields['email'],
+				'password' => bcrypt($fields['password']),
+				'role' => $fields['role'],
+				'username' => $fields['username'],
+			]);
+
+			$ret = $fields;
+			$token = $user->createToken('myapptoken')->plainTextToken;
+		}
+
+		return response($ret, (!empty($user)) ? 200 : 400);
+
+	});
 
 	// Route::post('/products', [ProductController::class, 'store']);
 	// Route::put('/products/{id}', [ProductController::class, 'update']);
@@ -97,6 +179,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 	// ?page=xx&limit=xx
 	Route::get('/suratkeluar', [SuratKeluarController::class, 'index']);
+	// Route::get('/suratkeluar/agendano', [SuratKeluarController::class, 'agenda_nok']);
 
 	/*
 		                // 'tgl_surat' => 'required',
@@ -119,6 +202,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 	Route::delete('/suratkeluar/{id}', [SuratKeluarController::class, 'destroy']);
 
 	Route::get('/suratmasuk', [SuratMasukController::class, 'index']);
+	Route::get('/suratmasuk/agendano', [SuratMasukController::class, 'agenda_no']);
 	Route::post('/suratmasuk', [SuratMasukController::class, 'store']);
 	Route::post('/suratmasuk/{id}', [SuratMasukController::class, 'update']);
 	Route::delete('/suratmasuk/{id}', [SuratMasukController::class, 'destroy']);
@@ -126,11 +210,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 	// internal | eksternal
 	Route::get('/document/{type}', [DocumentController::class, 'index']);
+
 	Route::post('/document/{type}', [DocumentController::class, 'store']);
 	Route::post('/document/{type}/{id}', [DocumentController::class, 'update']);
 	Route::delete('/document/{type}/{id}', [DocumentController::class, 'destroy']);
 
 	Route::get('/categories', [CategoryController::class, 'index']);
+	Route::get('/categories/{type}', [CategoryController::class, 'byType']);
 	Route::post('/categories', [CategoryController::class, 'create']);
 	Route::put('/categories/{id}', [CategoryController::class, 'update']);
 	Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);

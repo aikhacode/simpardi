@@ -12,7 +12,7 @@
                                 class="p-button-success mr-2"
                                 @click="openNew"
                             />
-                            <Button
+                            <!-- <Button
                                 label="Delete"
                                 icon="pi pi-trash"
                                 class="p-button-danger"
@@ -20,7 +20,7 @@
                                 :disabled="
                                     !selectedSurats || !selectedSurats.length
                                 "
-                            />
+                            /> -->
                         </div>
                     </template>
 
@@ -34,10 +34,10 @@
                             class="mr-2 inline-block"
                         /> -->
                         <Button
-                            label="Export"
-                            icon="pi pi-upload"
+                            label="Print"
+                            icon="pi pi-print"
                             class="p-button-help"
-                            @click="exportCSV($event)"
+                            @click="print"
                         />
                     </template>
                 </Toolbar>
@@ -45,7 +45,7 @@
                 <DataTable
                     ref="dt"
                     :value="Surats"
-                    v-model:selection="selectedSurats"
+                   
                     dataKey="id"
                     :paginator="true"
                     :rows="10"
@@ -70,10 +70,10 @@
                         </div>
                     </template>
 
-                    <Column
+                    <!-- <Column
                         selectionMode="multiple"
                         headerStyle="width: 3rem"
-                    ></Column>
+                    ></Column> -->
                     <Column
                         field="tgl_surat"
                         header="Tgl Surat"
@@ -170,6 +170,7 @@
                                 icon="pi pi-trash"
                                 class="p-button-rounded p-button-warning mt-2"
                                 @click="confirmDeleteSurat(slotProps.data)"
+                                :disabled="store.isNotAdmin()"
                             />
                         </template>
                     </Column>
@@ -449,6 +450,8 @@
             </div>
         </div>
     </div>
+
+  <DynamicDialog/>
 </template>
 
 <script>
@@ -456,11 +459,13 @@ import { FilterMatchMode } from "primevue/api";
 import SuratService from "../service/SuratKeluarService.js";
 import { useStore } from "@/store.js";
 import axios from "axios";
-import { parseArsipUrl } from "@/helper.js";
+import { parseArsipUrl,dayjs } from "@/helper.js";
+import DialogPrint from "@/dialogs/DialogPrint.vue"
 
 export default {
     data() {
         return {
+            store:useStore(),
             Surats: null,
             SuratDialog: false,
             deleteSuratDialog: false,
@@ -501,9 +506,14 @@ export default {
             return;
         },
         openNew() {
+             this.SuratService.getAgenda().then((res)=>{
+                 console.log(res)
+                  this.Surat.no_agenda = res[0].max+1;
+              })
             this.Surat = {
                 no_surat: "445/   /403.103.17/2022",
                 arsips: [],
+                
             };
             this.submitted = false;
             this.editMode = false;
@@ -525,10 +535,7 @@ export default {
         },
         saveSurat() {
             this.submitted = true;
-            console.log(
-                "tgl",
-                new Date(this.Surat.tgl_surat).toISOString().slice(0, 10)
-            );
+            
 
             if (this.validateInput())
                 if (this.Surat.no_surat.trim()) {
@@ -538,14 +545,25 @@ export default {
                             "/suratkeluar/" + this.Surat.id
                         );
                     }
+
+                    let tgl_save = {
+                      tgl_surat:null,
+                    
+                    };
+
+                    if (this.Surat.tgl_surat instanceof Date) {
+                        tgl_save.tgl_surat = dayjs(this.Surat.tgl_surat).format('YYYY-MM-DD')
+                    } else {
+                        tgl_save.tgl_surat = dayjs(this.Surat.tgl_surat,'DD-MM-YYYY').format('YYYY-MM-DD')
+                    }
+
+
                     axios({
                         method: "post",
                         url: url_save,
                         data: {
                             arsips: this.Surat.arsips,
-                            tgl_surat: new Date(this.Surat.tgl_surat)
-                                .toISOString()
-                                .slice(0, 10),
+                            tgl_surat: tgl_save.tgl_surat,
                             no_agenda: this.Surat.no_agenda,
                             perihal: this.Surat.perihal,
                             tujuan: this.Surat.tujuan,
@@ -724,6 +742,41 @@ export default {
         parseArsipUrls(filename_storagepath) {
             return parseArsipUrl(filename_storagepath);
         },
+        print(){
+              const dialogRef = this.$dialog.open(DialogPrint, {
+                props: {
+                    header: 'Print Stok Masuk',
+                    style: {
+                        width: '80vw',
+                    },
+                    breakpoints:{
+                        '960px': '80vw',
+                        '640px': '90vw'
+                    },
+                    modal: true
+                },
+                data:{
+                    type:'print-surat-keluar',
+                },
+                templates: {
+                    // footer: () => {
+                    //     return [
+                    //         h('div',{class:'p-3'}),
+                         
+                    //         h(Button, { label: "Close", icon: "pi pi-check", onClick: () => dialogRef.close({ buttonType: 'Yes' }), autofocus: true })
+                    //     ]
+                    // }
+                },
+                onClose: (options) => {
+                    const data = options.data;
+                    if (data) {
+                        // this.refreshCategory()
+                        // this.$toast.add({ severity:'info', 'ok', life: 3000 });
+                    }
+                }
+            });
+             // window.open(`${location.protocol}//${location.hostname}/print/suratkeluar`, "_blank")
+        }
     },
 };
 </script>

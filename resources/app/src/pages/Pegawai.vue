@@ -32,7 +32,8 @@
 			
 			</div> -->
 		<div class="flex justify-content-end">
-			<Button label="Save" icon="pi pi-check" class="p-button-lg" @click="save()"/>
+			<Button :disabled="store.isNotAdmin()" label="Save" icon="pi pi-check" class="p-button-lg" @click="save()"/>
+			<Button  label="Back"  class="ml-3 p-button-lg" @click="$router.go(-1)"/>
 			</div>
 	</div>
 </template>

@@ -1,6 +1,6 @@
 import {useStore} from '@/store.js'
 import axios from 'axios';
-
+import {parseApi} from "@/helper"
 
 
 export default class Service {
@@ -9,7 +9,7 @@ export default class Service {
 
         return axios({
             method: 'get',
-                url: useStore().parseApi('/suratkeluar'),
+                url: parseApi('/suratkeluar'),
                 headers:{
                     "Authorization": `Bearer ${useStore().token}` 
                 }
@@ -20,6 +20,19 @@ export default class Service {
             })
 			
             
+    }
+
+     getAgenda()
+    {
+        return axios({
+            method: 'get',
+                url: parseApi('/suratkeluar/agendano'),
+                // headers:{
+                //     "Authorization": `Bearer ${useStore().token}` 
+                // }
+        }).then((res) => {
+                return res.data
+        })
     }
 
     

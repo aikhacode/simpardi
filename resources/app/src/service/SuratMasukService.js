@@ -27,5 +27,18 @@ export default class Service {
             
     }
 
+    getAgenda()
+    {
+        return axios({
+            method: 'get',
+                url: useStore().parseApi('/suratmasuk/agendano'),
+                headers:{
+                    "Authorization": `Bearer ${useStore().token}` 
+                }
+        }).then((res) => {
+                return res.data
+        })
+    }
+
     
 }

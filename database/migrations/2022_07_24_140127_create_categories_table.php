@@ -13,8 +13,10 @@ class CreateCategoriesTable extends Migration {
 	public function up() {
 		Schema::create('categories', function (Blueprint $table) {
 			$table->id();
+			$table->string('type')->default('INTERNAL');
 			$table->string('category')->default('SK');
 			$table->timestamps();
+
 		});
 	}
 

@@ -12,17 +12,18 @@
                 class="p-button-success mr-2"
                 @click="openNew"
               />
-              <Button
-                label="Delete"
-                icon="pi pi-trash"
-                class="p-button-danger"
-                @click="confirmDeleteSelected"
-                :disabled="!selectedSurats || !selectedSurats.length"
-              />
+              
             </div>
           </template>
 
           <template v-slot:end>
+            <Button
+                label="Print"
+                icon="pi pi-print"
+                class="p-button-danger"
+                @click="onPrint"
+                
+              />
             <!-- <FileUpload
                             mode="basic"
                             accept="image/*"
@@ -31,12 +32,12 @@
                             chooseLabel="Import"
                             class="mr-2 inline-block"
                         /> -->
-            <Button
+            <!-- <Button
               label="Export"
               icon="pi pi-upload"
               class="p-button-help"
               @click="exportCSV($event)"
-            />
+            /> -->
           </template>
         </Toolbar>
 
@@ -151,7 +152,7 @@
             field="status_disposisi"
             :sortable="true" headerStyle="min-width:10rem;">
             <template #body="slotProps">
-               <Button type="button" :label="(slotProps.data.status_disposisi) ? 'SUDAH' : 'BELUM'"  :class="{'p-button-success': (slotProps.data.status_disposisi),'p-button-danger':(!slotProps.data.status_disposisi)}"  />
+               <Button icon="pi pi-external-link" :disabled="store.isNotAdmin()" @click="onClickDisposisi(slotProps.data)" type="button" :label="(slotProps.data.status_disposisi) ? 'SUDAH' : 'BELUM'"  :class="{'p-button-success': (slotProps.data.status_disposisi),'p-button-danger':(!slotProps.data.status_disposisi)}"  />
             </template>
 
           </Column>
@@ -167,6 +168,7 @@
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-warning mt-2"
                 @click="confirmDeleteSurat(slotProps.data)"
+                :disabled="store.isNotAdmin()"
               />
             </template>
           </Column>
@@ -565,6 +567,8 @@
       />
     </template>
   </Dialog>
+
+  <DynamicDialog/>
 </template>
 
 <script>
@@ -572,8 +576,9 @@ import { FilterMatchMode } from "primevue/api";
 import SuratService from "../service/SuratMasukService.js";
 import { useStore } from "@/store.js";
 import axios from "axios";
-import { parseArsipUrl } from "@/helper.js";
+import { parseArsipUrl,dayjs } from "@/helper.js";
 import Disposisi from "@/dialogs/Disposisi.vue";
+import DialogPrint from "@/dialogs/DialogPrint.vue"
 
 export default {
   components: {
@@ -581,6 +586,7 @@ export default {
   },
   data() {
     return {
+      store:useStore(),
       Surats: null,
       SuratDialog: false,
       deleteSuratDialog: false,
@@ -624,6 +630,10 @@ export default {
       return;
     },
     openNew() {
+      this.SuratService.getAgenda().then((res)=>{
+         console.log(res)
+          this.Surat.no_agenda = res[0].max+1;
+      })
       this.Surat = {
         no_surat: "445/   /403.103.17/2022",
         arsips: [],
@@ -658,15 +668,31 @@ export default {
           if (this.editMode) {
             url_save = useStore().parseApi("/suratmasuk/" + this.Surat.id);
           }
+
+           let tgl_save = {
+              tgl_surat:null,
+              tgl_surat_masuk:null
+            };
+
+            if (this.Surat.tgl_surat instanceof Date) {
+                tgl_save.tgl_surat = dayjs(this.Surat.tgl_surat).format('YYYY-MM-DD')
+            } else {
+                tgl_save.tgl_surat = dayjs(this.Surat.tgl_surat,'DD-MM-YYYY').format('YYYY-MM-DD')
+            }
+
+            if (this.Surat.tgl_surat_masuk instanceof Date) {
+                tgl_save.tgl_surat_masuk = dayjs(this.Surat.tgl_surat_masuk).format('YYYY-MM-DD')
+            } else {
+                tgl_save.tgl_surat_masuk = dayjs(this.Surat.tgl_surat_masuk,'DD-MM-YYYY').format('YYYY-MM-DD')
+            }
+
           axios({
             method: "post",
             url: url_save,
             data: {
               arsips: this.Surat.arsips,
-              tgl_surat: new Date(this.Surat.tgl_surat).toISOString().slice(0, 10),
-              tgl_surat_masuk: new Date(this.Surat.tgl_surat_masuk)
-                .toISOString()
-                .slice(0, 10),
+              tgl_surat: tgl_save.tgl_surat,
+              tgl_surat_masuk: tgl_save.tgl_surat_masuk,
               no_agenda: this.Surat.no_agenda,
               perihal: this.Surat.perihal,
               pengirim: this.Surat.pengirim,
@@ -851,14 +877,33 @@ export default {
         if (this.validateInput())
         {
           let url_save = useStore().parseApi("/suratmasuk/disposisi/"+this.Surat.id);
+         
+           let tgl_save = {
+              tgl_surat:null,
+              tgl_terima:null
+            };
+
+            if (this.SuratDisposisi.tgl_surat instanceof Date) {
+                tgl_save.tgl_surat = dayjs(this.SuratDisposisi.tgl_surat).format('YYYY-MM-DD')
+            } else {
+                tgl_save.tgl_surat = dayjs(this.SuratDisposisi.tgl_surat,'DD-MM-YYYY').format('YYYY-MM-DD')
+            }
+
+            if (this.SuratDisposisi.tgl_terima instanceof Date) {
+                tgl_save.tgl_terima = dayjs(this.SuratDisposisi.tgl_terima).format('YYYY-MM-DD')
+            } else {
+                tgl_save.tgl_terima = dayjs(this.SuratDisposisi.tgl_terima,'DD-MM-YYYY').format('YYYY-MM-DD')
+            }
+
+            console.log(this.SuratDisposisi,tgl_save)
+            
+
           axios({
             method: "post",
             url: url_save,
             data: {
-              tgl_surat: new Date(this.SuratDisposisi.tgl_surat).toISOString().slice(0, 10),
-              tgl_terima: new Date(this.SuratDisposisi.tgl_terima)
-                .toISOString()
-                .slice(0, 10),
+              tgl_surat: tgl_save.tgl_surat,
+              tgl_terima: tgl_save.tgl_terima,
               no_agenda: this.SuratDisposisi.no_agenda,
               perihal: this.SuratDisposisi.perihal,
               dari: this.SuratDisposisi.dari,
@@ -882,6 +927,46 @@ export default {
           
           
           
+    },
+    onClickDisposisi(dt){
+      console.log('dt',dt)
+
+      this.doDisposisi(dt)
+    },
+    onPrint(){
+          const dialogRef = this.$dialog.open(DialogPrint, {
+                props: {
+                    header: 'Print Stok Masuk',
+                    style: {
+                        width: '80vw',
+                    },
+                    breakpoints:{
+                        '960px': '80vw',
+                        '640px': '90vw'
+                    },
+                    modal: true
+                },
+                data:{
+                    type:'print-surat-masuk',
+                },
+                templates: {
+                    // footer: () => {
+                    //     return [
+                    //         h('div',{class:'p-3'}),
+                         
+                    //         h(Button, { label: "Close", icon: "pi pi-check", onClick: () => dialogRef.close({ buttonType: 'Yes' }), autofocus: true })
+                    //     ]
+                    // }
+                },
+                onClose: (options) => {
+                    const data = options.data;
+                    if (data) {
+                        // this.refreshCategory()
+                        // this.$toast.add({ severity:'info', 'ok', life: 3000 });
+                    }
+                }
+            });
+        // window.open(`${location.protocol}//${location.hostname}/print/suratmasuk`, "_blank")
     },
   },
 };

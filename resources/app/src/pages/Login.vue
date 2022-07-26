@@ -13,19 +13,37 @@
                     </div>
                 
                     <div class="w-full md:w-10 mx-auto">
+                        <label for="nama" class="block text-900 text-xl font-medium mb-2">Nama</label>
+                        <Dropdown @change="onChangeUser" class="w-full mb-3 h-49" v-model="selectedUser" :options="users" optionLabel="name" :filter="true" placeholder="Pilih user" :showClear="true">
+                            <template #value="slotProps">
+                                <div class="country-item country-item-value" v-if="slotProps.value">
+                                    
+                                    <div>{{slotProps.value.name}}</div>
+                                </div>
+                                <span v-else>
+                                    {{slotProps.placeholder}}
+                                </span>
+                            </template>
+                            <template #option="slotProps">
+                                <div class="country-item">
+                                    
+                                    <div>{{slotProps.option.name}}</div>
+                                </div>
+                            </template>
+                        </Dropdown>
                         <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
                         <InputText id="email1" v-model="email" type="text" class="w-full mb-3" placeholder="Email" style="padding:1rem;" />
                 
                         <label for="password1" class="block text-900 font-medium text-xl mb-2">Password</label>
                         <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="w-full mb-3" inputClass="w-full" inputStyle="padding:1rem"></Password>
                 
-                        <div class="flex align-items-center justify-content-between mb-5">
+                        <!-- <div class="flex align-items-center justify-content-between mb-5">
                             <div class="flex align-items-center">
                                 <Checkbox id="rememberme1" v-model="checked" :binary="true" class="mr-2"></Checkbox>
                                 <label for="rememberme1">Remember me</label>
                             </div>
                             <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a>
-                        </div>
+                        </div> -->
                         <Button @click="login()" label="Sign In" class="w-full p-3 text-xl"></button>
                     </div>
                 </div>
@@ -37,11 +55,14 @@
 <script>
 import {useStore} from '@/store.js'
 import { useRouter } from 'vue-router'
+import Service from "@/service/UserService"
 
 export default {
 
     data() {
         return {
+            users:[],
+            selectedUser:{},
             email: 'test@sipardi.ujung',
             password: '12345',
             checked: true,
@@ -49,8 +70,25 @@ export default {
             router: useRouter(),
         }
     },
+    UserService:null,
     created() {
+        this.UserService = Service
         // console.log(this.store.parseApi())
+    },
+    mounted(){
+        this.UserService.getUsers().then((res)=>{
+            console.log('user res',res)
+            this.users = res.map((item)=>{
+                return {
+                    name:item.username,
+                    value:item.username,
+                    email:item.email,
+                }
+            })
+
+            console.log('user',this.users)
+
+        })
     },
     computed: {
         logoColor() {
@@ -67,7 +105,12 @@ export default {
               
                this.router.push('/dashboard') 
            } 
-        }
+        },
+        onChangeUser(){
+            console.log(this.selectedUser)
+            this.email = this.selectedUser.email
+            this.password=''
+        },
     }
 }
 </script>
@@ -81,5 +124,9 @@ export default {
 .pi-eye-slash {
     transform:scale(1.6);
     margin-right: 1rem;
+}
+
+.h-49{
+    height: 49px;
 }
 </style>

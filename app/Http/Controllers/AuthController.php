@@ -7,62 +7,67 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
-{
-    public function register(Request $request) {
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
-        ]);
+class AuthController extends Controller {
+	public function index() {
+		return User::get(['name', 'email', 'role', 'username']);
 
-        $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
-        ]);
+	}
+	public function register(Request $request) {
+		$fields = $request->validate([
+			'name' => 'required|string',
+			'email' => 'required|string|unique:users,email',
+			'password' => 'required|string|confirmed',
+			'username' => 'required',
+		]);
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
+		$user = User::create([
+			'name' => $fields['name'],
+			'email' => $fields['email'],
+			'password' => bcrypt($fields['password']),
+			'username' => $fields['username'],
+		]);
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
+		$token = $user->createToken('myapptoken')->plainTextToken;
 
-        return response($response, 201);
-    }
+		$response = [
+			'user' => $user,
+			'token' => $token,
+		];
 
-    public function login(Request $request) {
-        $fields = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
-        ]);
+		return response($response, 201);
+	}
 
-        // Check email
-        $user = User::where('email', $fields['email'])->first();
+	public function login(Request $request) {
+		$fields = $request->validate([
+			'email' => 'required|string',
+			'password' => 'required|string',
+		]);
 
-        // Check password
-        if(!$user || !Hash::check($fields['password'], $user->password)) {
-            return response([
-                'message' => 'Bad creds'
-            ], 401);
-        }
+		// Check email
+		$user = User::where('email', $fields['email'])->first();
 
-        $token = $user->createToken('myapptoken')->plainTextToken;
+		// Check password
+		if (!$user || !Hash::check($fields['password'], $user->password)) {
+			return response([
+				'message' => 'Bad creds',
+			], 401);
+		}
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
+		$token = $user->createToken('myapptoken')->plainTextToken;
 
-        return response($response, 201);
-    }
+		$response = [
+			'user' => $user,
+			'token' => $token,
+		];
 
-    public function logout(Request $request) {
-        auth()->user()->tokens()->delete();
+		return response($response, 201);
+	}
 
-        return [
-            'message' => 'Logged out'
-        ];
-    }
+	public function logout(Request $request) {
+		auth()->user()->tokens()->delete();
+
+		return [
+			'message' => 'Logged out',
+		];
+	}
 }
