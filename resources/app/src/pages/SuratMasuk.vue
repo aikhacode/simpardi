@@ -136,6 +136,20 @@
           </Column>
 
           <Column
+              header="Upload"
+              headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              
+              <Button v-if="slotProps.data.arsips.length"
+                label="Ada"
+                class="p-button-success mr-2"
+                @click="onUploadClickAtTable(slotProps.data)"
+              />
+            </template>
+          </Column>
+
+          <Column
             field="disposisi"
             header="Disposisi"
             :sortable="true"
@@ -927,6 +941,11 @@ export default {
           
           
           
+    },
+     onUploadClickAtTable(data){
+       useStore().arsipsTemp = data.arsips
+       console.log(useStore().arsipsTemp)
+       this.$router.push({path:'/view-upload'})
     },
     onClickDisposisi(dt){
       console.log('dt',dt)

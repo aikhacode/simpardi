@@ -129,6 +129,20 @@
                             {{ slotProps.data.tujuan }}
                         </template>
                     </Column>
+
+                    <Column
+              header="Upload"
+              headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              
+              <Button v-if="slotProps.data.arsips.length"
+                label="Ada"
+                class="p-button-success mr-2"
+                @click="onUploadClickAtTable(slotProps.data)"
+              />
+            </template>
+          </Column>
                     <!-- <Column header="Image" headerStyle="width:14%; min-width:10rem;">
 						<template #body="slotProps">
 							<span class="p-column-title">Image</span>
@@ -742,6 +756,11 @@ export default {
         parseArsipUrls(filename_storagepath) {
             return parseArsipUrl(filename_storagepath);
         },
+         onUploadClickAtTable(data){
+       useStore().arsipsTemp = data.arsips
+       console.log(useStore().arsipsTemp)
+       this.$router.push({path:'/view-upload'})
+    },
         print(){
               const dialogRef = this.$dialog.open(DialogPrint, {
                 props: {
