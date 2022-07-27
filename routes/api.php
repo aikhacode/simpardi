@@ -7,7 +7,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\SuratMasukController;
-use App\Http\Controllers\TipeSuratController;
+use App\Http\Controllers\TipesuratController;
 use App\Models\Arsip;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
