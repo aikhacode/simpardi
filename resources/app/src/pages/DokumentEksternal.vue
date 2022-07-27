@@ -86,7 +86,7 @@
           </Column>
           <Column
             field="no_sk"
-            header="No SK"
+            header="No"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           >
@@ -232,7 +232,7 @@
             </div>
 
             <div class="field col-12 md:col-6">
-              <label for="noSK">No SK</label>
+              <label for="noSK">No</label>
               <InputText
                 id="noSK"
                 v-model.trim="Document.no_sk"
