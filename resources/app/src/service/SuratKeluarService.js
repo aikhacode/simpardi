@@ -4,6 +4,24 @@ import {parseApi} from "@/helper"
 
 
 export default class Service {
+    getTipeSurats(){
+        const store = useStore()
+
+        return axios({
+            method: 'get',
+                url: useStore().parseApi('/tipesurat'),
+                headers:{
+                    "Authorization": `Bearer ${useStore().token}` 
+                }
+        }).then((res) => {
+                // store.mail.outbox.data = res.data
+                // console.log(res.data,store.parseApi("/suratkeluar"))
+                            
+                return res.data
+            })
+        
+    }
+    
     getSurats() {
         const store = useStore()
 

@@ -61,7 +61,11 @@ export default {
                 },
                 {   label: 'ARSIP',
                     items: [
-                        {label:'Kategori Tambah-Edit',icon:'pi pi-fw pi-folder', to: '/categories'},
+                        {label:'Kategori +',icon:'pi pi-fw pi-folder',
+                          items: [ {label:'Kategori Surat',icon:'pi pi-fw pi-folder', to: '/categories'},
+                                    {label:'Tipe No Surat',icon:'pi pi-fw pi-folder', to: '/tipesurats'}, 
+                                    ],
+                        },
                         {label: 'Data Pegawai', icon: 'pi pi-fw pi-users', to: '/data-pegawai'},
                         {label: "Dokumen Internal", icon: "pi pi-fw pi-folder", to: "/dokument-internal"},
                         {label: "Dokumen Eksternal", icon: "pi pi-fw pi-folder-open", to: "/dokument-eksternal"},

@@ -632,6 +632,15 @@ export default {
       this.Surats = data;
       console.log(this.Surats);
     });
+
+    this.SuratService.getTipeSurats().then((data)=>{
+      this.tipeSurat = data.map((item)=>{
+         return {
+          label:item.tipe,
+          value:item.template
+         }
+      })
+    })
   },
 
   methods: {
@@ -649,7 +658,7 @@ export default {
           this.Surat.no_agenda = res[0].max+1;
       })
       this.Surat = {
-        no_surat: "445/   /403.103.17/2022",
+        no_surat: "",
         arsips: [],
       };
       this.submitted = false;
@@ -831,10 +840,10 @@ export default {
       };
     },
     onTipeSuratChange() {
-      let idx = this.Surat.no_surat.indexOf("/");
-      let tmp = this.Surat.no_surat.slice(idx, this.Surat.no_surat.length);
+      // let idx = this.Surat.no_surat.indexOf("/");
+      // let tmp = this.Surat.no_surat.slice(idx, this.Surat.no_surat.length);
 
-      this.Surat.no_surat = this.Surat.tipeSurat.value + tmp;
+      this.Surat.no_surat = this.Surat.tipeSurat.value ;
     },
     trimSpace(str) {
       return str.replace(" ", "");

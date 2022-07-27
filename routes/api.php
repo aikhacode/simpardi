@@ -7,6 +7,7 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\SuratMasukController;
+use App\Http\Controllers\TipeSuratController;
 use App\Models\Arsip;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -81,6 +82,11 @@ Route::get('/bro', [AuthController::class, 'index']);
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+	Route::get('/tipesurat', [TipesuratController::class, 'index']);
+	Route::post('/tipesurat', [TipesuratController::class, 'create']);
+	Route::put('/tipesurat/{id}', [TipesuratController::class, 'update']);
+	Route::delete('/tipesurat/{id}', [TipesuratController::class, 'destroy']);
+
 	Route::delete('/bro/delete/{email}', function (Request $request, $email) {
 		$f = $request->all();
 		$usr = \App\Models\User::where('email', '=', $email)->delete();

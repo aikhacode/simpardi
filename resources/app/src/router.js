@@ -59,6 +59,13 @@ const routes = [
                 meta: { requiresAuth: true },
             },
             {
+                path: "/tipesurats",
+                name: "tipesurats",
+                component: () => import("./pages/TipeSurat.vue"),
+                // props: true,
+                meta: { requiresAuth: true },
+            },
+            {
                 path: "/categories/:id",
                 name: "categoriesedit",
                 component: () => import("./pages/CategoryEdit.vue"),

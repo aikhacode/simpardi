@@ -33,11 +33,14 @@ class DatabaseSeeder extends Seeder {
 		// ]);
 
 		//pegawai import
+
 		\Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\UsersImport, \Illuminate\Support\Facades\Storage::path('seeder/user.xlsx'));
 
 		\Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\PegawaisImport, \Illuminate\Support\Facades\Storage::path('seeder/pegawai-import22.xlsx'));
 
 		\Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\CategoriesImport, \Illuminate\Support\Facades\Storage::path('seeder/category.xlsx'));
+
+		\Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\TipesuratsImport, \Illuminate\Support\Facades\Storage::path('seeder/tipe.csv'));
 
 	}
 }
