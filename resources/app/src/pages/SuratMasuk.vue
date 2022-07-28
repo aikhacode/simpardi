@@ -333,7 +333,7 @@
 
                   <Button
                     @click="doDisposisi(Surat)"
-                    :disabled="!editMode"
+                    :disabled="!editMode || store.isNotAdmin()"
                     class="font-medium p-button-raised ml-3 w-15rem p-button-danger"
                     >Buat Disposisi
                   </Button>
