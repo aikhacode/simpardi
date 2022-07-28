@@ -80,8 +80,34 @@ Route::get('/upload/arsip', function (Request $request) {
 Route::get('/suratkeluar/agendano', [SuratKeluarController::class, 'agenda_nok']);
 Route::get('/bro', [AuthController::class, 'index']);
 
+// Route::get('/ttd/', function (Request $request) {
+// 	$storagepath = base64_decode($request->input('arsip'));
+// 	// return $storagepath;
+
+// 	$arsip = Arsip::where('storagepath', $storagepath)->get();
+
+// 	// return response($arsip);
+// 	if ($arsip) {
+// 		$path = storage_path('app/' . $storagepath);
+
+// 		if (!file_exists($path)) {
+
+// 			abort(404);
+
+// 		}
+
+// 		// return response()->download($path, $arsip[0]->filename);
+// 		return response()->file($path);
+// 	} else {
+// 		abort(404);
+
+// 	}
+
+// });
+
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
 	Route::get('/tipesurat', [TipesuratController::class, 'index']);
 	Route::post('/tipesurat', [TipesuratController::class, 'create']);
 	Route::put('/tipesurat/{id}', [TipesuratController::class, 'update']);

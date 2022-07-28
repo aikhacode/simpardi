@@ -114,6 +114,26 @@ class SuratMasukController extends Controller {
 		$surat = SuratMasuk::find($id);
 		$surat->disposisi;
 
+		$disp = Disposisi::where('no_surat', $fields['no_surat'])->where('disposisiable_type', 'App\Models\SuratMasuk');
+		$old_path = $disp->get('ttd');
+		$disp->delete();
+		$del = 'woo';
+
+		if (count($old_path)) {
+			if (Storage::exists($old_path[0]->ttd)) {
+				$del = Storage::delete($old_path[0]->ttd);
+				// return response(['ada', $old_path[0]]);
+			}
+			// return respo/nse(['---ada', $old_path[0]]);
+
+		}
+
+		$data_uri = $fields['ttd_data'];
+		$encoded_image = explode(",", $data_uri)[1];
+		$decoded_image = base64_decode($encoded_image);
+		Storage::put('tmp/ttd.png', $decoded_image);
+		$new_path = Storage::putFile('ttd', new \Illuminate\Http\File(storage_path('app/tmp/ttd.png')));
+
 		$disposisi = new Disposisi;
 		$disposisi->dari = $fields['dari'];
 		$disposisi->tgl_surat = $fields['tgl_surat'];
@@ -121,12 +141,13 @@ class SuratMasukController extends Controller {
 		$disposisi->perihal = $fields['perihal'];
 		$disposisi->no_agenda = $fields['no_agenda'];
 		$disposisi->tgl_terima = $fields['tgl_terima'];
-		Disposisi::where('no_surat', $fields['no_surat'])->where('disposisiable_type', 'App\Models\SuratMasuk')->delete();
+		$disposisi->ttd = $new_path;
+
 		$res = $surat->disposisis()->save($disposisi);
 
 		$a = $surat->disposisis;
 
-		return response($surat, 200);
+		return response([$surat, $del, $old_path[0]->ttd], 200);
 
 	}
 

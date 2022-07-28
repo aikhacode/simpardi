@@ -37,6 +37,7 @@ export default class Service {
                 // console.log(res.data,store.parseApi("/suratkeluar"))
                 res.data = res.data.map((item)=>{
                     item.status_disposisi = (item.disposisis) ? true : false
+                  
                     return item
                 })
                 

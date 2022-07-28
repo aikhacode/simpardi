@@ -99,6 +99,8 @@ import DynamicDialog from 'primevue/dynamicdialog';
 import CodeHighlight from "./AppCodeHighlight.js";
 import BlockViewer from "./BlockViewer.vue";
 
+import VueSignaturePad from 'vue-signature-pad';
+
 import {createPinia} from 'pinia'
 
 
@@ -109,6 +111,7 @@ app.config.globalProperties.$appState = reactive({
     darkTheme: false,
 });
 
+app.use(VueSignaturePad)
 app.use(PrimeVue, { ripple: true, inputStyle: "outlined" });
 app.use(ConfirmationService);
 app.use(ToastService);
@@ -121,6 +124,7 @@ app.directive("code", CodeHighlight);
 app.directive("badge", BadgeDirective);
 app.directive("styleclass", StyleClass);
 
+app.component("VueSignaturePad");
 app.component("Accordion", Accordion);
 app.component("AccordionTab", AccordionTab);
 app.component("AutoComplete", AutoComplete);

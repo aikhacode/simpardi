@@ -138,7 +138,7 @@
           <div class="formgrid grid">
             <div class="field col-12 md:col-6">
               <label for="tahun" class="mb-3">Tahun</label>
-              <Dropdown
+             <!--  <Dropdown
                 id="tahun"
 
                 v-model="editPickExtra.tahun"
@@ -149,7 +149,10 @@
                 @change="onTahunChange"
               >
                 
-              </Dropdown>
+              </Dropdown> -->
+
+               <Calendar id="tahun" v-model="Document.tahun" view="year" dateFormat="yy"/>
+
             </div>
             <div class="field col-12 md:col-6">
               <label for="categoryDocument" class="mb-3">Kategori (Pilih kategori untuk bantu isi kategory dokument, bila tidak ada diisi sendiri.)</label>
@@ -443,6 +446,7 @@ export default {
         
         // no_Document: "445/   /403.103.17/2022",
         arsips: [],
+        tahun:dayjs(this.Document.tahun).format('YYYY')
 
       };
 

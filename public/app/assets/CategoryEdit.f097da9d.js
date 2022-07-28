@@ -1,0 +1,1 @@
+import{_ as s,c as e,o as t,a as o}from"./index.110fcee2.js";const c={},a={class:"grid"},r=o("div",{class:"card"},null,-1),n=[r];function _(d,i,l,p,f,u){return t(),e("div",a,n)}const m=s(c,[["render",_]]);export{m as default};

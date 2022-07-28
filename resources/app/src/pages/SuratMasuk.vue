@@ -566,6 +566,15 @@
       
     </div>
 
+     <div class="formgrid grid">
+     
+
+      <div class="field col-12 md:col-6 border-500 surface-overlay border-3 border-round">
+        <label for="ttd" class="mb-3">TTD</label>
+        <VueSignaturePad  width="100%" height="300px" ref="signaturePad" />
+      </div>
+    </div>
+
     <template #footer>
       <Button
         label="Cancel"
@@ -892,11 +901,12 @@ export default {
         perihal:this.Surat.perihal,
         no_agenda:this.Surat.no_agenda,
         tgl_terima:this.Surat.tgl_surat_masuk,
+        ttd:this.Surat.disposisis.ttd,
       }
 
       this.disposisiDialogs = true;
     },
-    saveDisposisi() {
+    async saveDisposisi() {
         if (this.validateInput())
         {
           let url_save = useStore().parseApi("/suratmasuk/disposisi/"+this.Surat.id);
@@ -905,6 +915,29 @@ export default {
               tgl_surat:null,
               tgl_terima:null
             };
+
+            const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
+            console.log(isEmpty);
+            console.log(data);
+            if (!isEmpty){
+                // axios({
+                //     method:'POST',
+                //     url:useStore().parseApi('/ttd'),
+                //     data:{
+                //       ttd_data: data,
+                //     },
+                //     headers: {
+                //     Authorization: `Bearer ${useStore().token}`,
+
+                //     },
+                  
+                  
+                //   }).then((res) => {
+                //       let path = res.data
+                //       console.log('path',path)
+                //     })
+              this.SuratDisposisi.ttd_data = data
+            } else this.SuratDisposisi.ttd_data = null;
 
             if (this.SuratDisposisi.tgl_surat instanceof Date) {
                 tgl_save.tgl_surat = dayjs(this.SuratDisposisi.tgl_surat).format('YYYY-MM-DD')
@@ -931,13 +964,16 @@ export default {
               perihal: this.SuratDisposisi.perihal,
               dari: this.SuratDisposisi.dari,
               no_surat: this.SuratDisposisi.no_surat,
+              ttd_data: this.SuratDisposisi.ttd_data,
             },
             headers: {
               Authorization: `Bearer ${useStore().token}`,
             },
           }).then((res) => {
+             console.log('after save disposii',res.data)
             this.SuratService.getSurats().then((data) => {
               this.Surats = data;
+
               console.log(this.Surats);
             });
             this.disposisiDialogs = false;
