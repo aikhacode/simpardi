@@ -80,33 +80,26 @@ Route::get('/upload/arsip', function (Request $request) {
 Route::get('/suratkeluar/agendano', [SuratKeluarController::class, 'agenda_nok']);
 Route::get('/bro', [AuthController::class, 'index']);
 
-// Route::get('/ttd/', function (Request $request) {
-// 	$storagepath = base64_decode($request->input('arsip'));
-// 	// return $storagepath;
-
-// 	$arsip = Arsip::where('storagepath', $storagepath)->get();
-
-// 	// return response($arsip);
-// 	if ($arsip) {
-// 		$path = storage_path('app/' . $storagepath);
-
-// 		if (!file_exists($path)) {
-
-// 			abort(404);
-
-// 		}
-
-// 		// return response()->download($path, $arsip[0]->filename);
-// 		return response()->file($path);
-// 	} else {
-// 		abort(404);
-
-// 	}
-
-// });
-
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+	Route::get('/ttd/disposisi/{id}', function ($id) {
+		$disp = \App\Models\Disposisi::find($id);
+
+		$storagepath = storage_path('app/' . $disp->ttd);
+
+		if (!file_exists($storagepath)) {
+
+			return response(['no exist', $storagepath], 401);
+
+		}
+
+		// return response()->download($path, $arsip[0]->filename);
+		// return response()->file($storagepath);
+		$data = 'data:image/png;base64,' . base64_encode(Storage::get($disp->ttd));
+		return $data;
+
+	});
 
 	Route::get('/tipesurat', [TipesuratController::class, 'index']);
 	Route::post('/tipesurat', [TipesuratController::class, 'create']);

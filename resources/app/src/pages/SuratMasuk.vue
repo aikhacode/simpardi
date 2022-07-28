@@ -12,18 +12,16 @@
                 class="p-button-success mr-2"
                 @click="openNew"
               />
-              
             </div>
           </template>
 
           <template v-slot:end>
             <Button
-                label="Print"
-                icon="pi pi-print"
-                class="p-button-danger"
-                @click="onPrint"
-                
-              />
+              label="Print"
+              icon="pi pi-print"
+              class="p-button-danger"
+              @click="onPrint"
+            />
             <!-- <FileUpload
                             mode="basic"
                             accept="image/*"
@@ -61,7 +59,10 @@
               <h5 class="m-0">Manage Surat Masuk</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
-                <InputText v-model="filters['global'].value" placeholder="Search..." />
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
+                />
               </span>
             </div>
           </template>
@@ -135,13 +136,10 @@
             </template>
           </Column>
 
-          <Column
-              header="Upload"
-              headerStyle="width:14%; min-width:10rem;"
-          >
+          <Column header="Upload" headerStyle="width:14%; min-width:10rem;">
             <template #body="slotProps">
-              
-              <Button v-if="slotProps.data.arsips.length"
+              <Button
+                v-if="slotProps.data.arsips.length"
                 label="Ada"
                 class="p-button-success mr-2"
                 @click="onUploadClickAtTable(slotProps.data)"
@@ -158,17 +156,28 @@
             <template #body="slotProps">
               <span class="p-column-title">Disposisi</span>
               {{ slotProps.data.disposisi }}
-              
             </template>
           </Column>
 
-          <Column header="Status Disposisi"
+          <Column
+            header="Status Disposisi"
             field="status_disposisi"
-            :sortable="true" headerStyle="min-width:10rem;">
+            :sortable="true"
+            headerStyle="min-width:10rem;"
+          >
             <template #body="slotProps">
-               <Button icon="pi pi-external-link" :disabled="store.isNotAdmin()" @click="onClickDisposisi(slotProps.data)" type="button" :label="(slotProps.data.status_disposisi) ? 'SUDAH' : 'BELUM'"  :class="{'p-button-success': (slotProps.data.status_disposisi),'p-button-danger':(!slotProps.data.status_disposisi)}"  />
+              <Button
+                icon="pi pi-external-link"
+                :disabled="store.isNotAdmin()"
+                @click="onClickDisposisi(slotProps.data)"
+                type="button"
+                :label="slotProps.data.status_disposisi ? 'SUDAH' : 'BELUM'"
+                :class="{
+                  'p-button-success': slotProps.data.status_disposisi,
+                  'p-button-danger': !slotProps.data.status_disposisi,
+                }"
+              />
             </template>
-
           </Column>
 
           <Column headerStyle="min-width:10rem;">
@@ -209,13 +218,16 @@
               >
                 <template #value="slotProps">
                   <div v-if="slotProps.value && slotProps.value.value">
-                    <span :class="'Surat-badge status-' + slotProps.value.value">{{
-                      slotProps.value.label
-                    }}</span>
+                    <span
+                      :class="'Surat-badge status-' + slotProps.value.value"
+                      >{{ slotProps.value.label }}</span
+                    >
                   </div>
                   <div v-else-if="slotProps.value && !slotProps.value.value">
                     <span
-                      :class="'Surat-badge status-' + slotProps.value.toLowerCase()"
+                      :class="
+                        'Surat-badge status-' + slotProps.value.toLowerCase()
+                      "
                       >{{ slotProps.value }}</span
                     >
                   </div>
@@ -252,7 +264,9 @@
                 v-model="Surat.tgl_surat_masuk"
                 dateFormat="dd-mm-yy"
               />
-              <small class="p-invalid" v-if="submitted && !Surat.tgl_surat_masuk"
+              <small
+                class="p-invalid"
+                v-if="submitted && !Surat.tgl_surat_masuk"
                 >tgl Surat Masuk harus diisi.</small
               >
             </div>
@@ -324,12 +338,17 @@
 
             <div class="field col-12 md:col-6">
               <label for="disposisi1"
-                >Disposisi oleh: (<b>Form Disposisi aktif setelah di save/mode edit.</b
+                >Disposisi oleh: (<b
+                  >Form Disposisi aktif setelah di save/mode edit.</b
                 >)</label
               >
               <div id="disposisi1" class="">
                 <div class="flex">
-                  <InputText id="disposisi" v-model.trim="Surat.disposisi" autofocus />
+                  <InputText
+                    id="disposisi"
+                    v-model.trim="Surat.disposisi"
+                    autofocus
+                  />
 
                   <Button
                     @click="doDisposisi(Surat)"
@@ -407,10 +426,13 @@
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
             <span v-if="Surat"
-              >Yakin akan menghapus No Surat: <b>{{ Surat.no_surat }}</b> karena juga akan
-              menghapus data upload ?</span
+              >Yakin akan menghapus No Surat: <b>{{ Surat.no_surat }}</b> karena
+              juga akan menghapus data upload ?</span
             >
           </div>
           <template #footer>
@@ -436,9 +458,13 @@
           :modal="true"
         >
           <div class="flex align-items-center justify-content-center">
-            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+            <i
+              class="pi pi-exclamation-triangle mr-3"
+              style="font-size: 2rem"
+            />
             <span v-if="Surat"
-              >Yakin akan menghapus karena juga akan menghapus data upload yang terpilih?
+              >Yakin akan menghapus karena juga akan menghapus data upload yang
+              terpilih?
             </span>
           </div>
           <template #footer>
@@ -495,7 +521,7 @@
           dateFormat="dd-mm-yy"
         />
         <small class="p-invalid" v-if="submitted && !SuratDisposisi.tgl_surat"
-          >tgl Surat  harus diisi.</small
+          >tgl Surat harus diisi.</small
         >
       </div>
 
@@ -547,7 +573,7 @@
         >
       </div>
 
-       <div class="field col-12 md:col-6">
+      <div class="field col-12 md:col-6">
         <label for="tglTerimaDisposisi" class="mb-3">Tgl Terima Surat</label>
         <Calendar
           :class="{
@@ -561,19 +587,55 @@
           >tgl Terima harus diisi.</small
         >
       </div>
-
-
-      
+       
     </div>
-
-     <div class="formgrid grid">
-     
-
-      <div class="field col-12 md:col-6 border-500 surface-overlay border-3 border-round">
-        <label for="ttd" class="mb-3">TTD</label>
-        <VueSignaturePad  width="100%" height="300px" ref="signaturePad" />
+    <p>Diteruskan kepada</p>
+    
+      <div class="grid p-fluid ">
+              <div v-for="(item,index) in 5" class="col-12 md:col-4">
+                  <div class="p-inputgroup">
+                      <span class="p-inputgroup-addon">
+                          {{index+1}}
+                      </span>
+                      <InputText v-model.trim="ModelSDTeruskan[index]"  />
+                  </div>
+              </div>
+              
       </div>
-    </div>
+
+      <div class="grid p-fluid ">
+        <div class="field col-12 mt-3">
+          <label for="isidisposisi" class="mb-3">Isi Disposisi</label>
+        <Textarea v-model="SuratDisposisi.isi" :autoResize="true" rows="5" cols="30" />
+        </div>
+             
+              
+      </div>
+
+      <div class="formgrid grid mt-4">
+        <div id="ttd" class="field col-12 md:col-6">
+          <div class="flex justify-content-between align-items-center mb-3">
+            <label class="ml-2 mb-3">TTD</label
+            ><Button
+              class="w-5"
+              label="Ganti TTD"
+              @click="gantiTTD"
+            />
+          </div>
+
+          <img v-if="SuratDisposisi.imgsrc"
+            :src="SuratDisposisi.imgsrc"
+            class="w-full border-1 surface-overlay border-300 border-round"
+          />
+
+          <div
+            v-if="!SuratDisposisi.imgsrc"
+            class="border-300 border-1 border-round"
+          >
+            <VueSignaturePad  width="100%" height="200px" ref="signaturePad" />
+          </div>
+        </div>
+      </div>
 
     <template #footer>
       <Button
@@ -591,7 +653,7 @@
     </template>
   </Dialog>
 
-  <DynamicDialog/>
+  <DynamicDialog />
 </template>
 
 <script>
@@ -599,9 +661,9 @@ import { FilterMatchMode } from "primevue/api";
 import SuratService from "../service/SuratMasukService.js";
 import { useStore } from "@/store.js";
 import axios from "axios";
-import { parseArsipUrl,dayjs } from "@/helper.js";
+import { parseArsipUrl, dayjs } from "@/helper.js";
 import Disposisi from "@/dialogs/Disposisi.vue";
-import DialogPrint from "@/dialogs/DialogPrint.vue"
+import DialogPrint from "@/dialogs/DialogPrint.vue";
 
 export default {
   components: {
@@ -609,13 +671,14 @@ export default {
   },
   data() {
     return {
-      store:useStore(),
+      store: useStore(),
       Surats: null,
       SuratDialog: false,
       deleteSuratDialog: false,
       deleteSuratsDialog: false,
       Surat: {},
-      SuratDisposisi:{},
+      SuratDisposisi: {},
+      ModelSDTeruskan:[],
       selectedSurats: null,
       filters: {},
       submitted: false,
@@ -642,14 +705,16 @@ export default {
       console.log(this.Surats);
     });
 
-    this.SuratService.getTipeSurats().then((data)=>{
-      this.tipeSurat = data.map((item)=>{
-         return {
-          label:item.tipe,
-          value:item.template
-         }
-      })
-    })
+    this.SuratService.getTipeSurats().then((data) => {
+      this.tipeSurat = data.map((item) => {
+        return {
+          label: item.tipe,
+          value: item.template,
+        };
+      });
+    });
+
+
   },
 
   methods: {
@@ -662,10 +727,10 @@ export default {
       return;
     },
     openNew() {
-      this.SuratService.getAgenda().then((res)=>{
-         console.log(res)
-          this.Surat.no_agenda = res[0].max+1;
-      })
+      this.SuratService.getAgenda().then((res) => {
+        console.log(res);
+        this.Surat.no_agenda = res[0].max + 1;
+      });
       this.Surat = {
         no_surat: "",
         arsips: [],
@@ -682,6 +747,8 @@ export default {
     },
     validateInput() {
       let Surat = this.Surat;
+     
+
       return (
         Surat.tgl_surat &&
         Surat.tgl_surat_masuk &&
@@ -701,22 +768,32 @@ export default {
             url_save = useStore().parseApi("/suratmasuk/" + this.Surat.id);
           }
 
-           let tgl_save = {
-              tgl_surat:null,
-              tgl_surat_masuk:null
-            };
+          let tgl_save = {
+            tgl_surat: null,
+            tgl_surat_masuk: null,
+          };
 
-            if (this.Surat.tgl_surat instanceof Date) {
-                tgl_save.tgl_surat = dayjs(this.Surat.tgl_surat).format('YYYY-MM-DD')
-            } else {
-                tgl_save.tgl_surat = dayjs(this.Surat.tgl_surat,'DD-MM-YYYY').format('YYYY-MM-DD')
-            }
+          if (this.Surat.tgl_surat instanceof Date) {
+            tgl_save.tgl_surat = dayjs(this.Surat.tgl_surat).format(
+              "YYYY-MM-DD"
+            );
+          } else {
+            tgl_save.tgl_surat = dayjs(
+              this.Surat.tgl_surat,
+              "DD-MM-YYYY"
+            ).format("YYYY-MM-DD");
+          }
 
-            if (this.Surat.tgl_surat_masuk instanceof Date) {
-                tgl_save.tgl_surat_masuk = dayjs(this.Surat.tgl_surat_masuk).format('YYYY-MM-DD')
-            } else {
-                tgl_save.tgl_surat_masuk = dayjs(this.Surat.tgl_surat_masuk,'DD-MM-YYYY').format('YYYY-MM-DD')
-            }
+          if (this.Surat.tgl_surat_masuk instanceof Date) {
+            tgl_save.tgl_surat_masuk = dayjs(this.Surat.tgl_surat_masuk).format(
+              "YYYY-MM-DD"
+            );
+          } else {
+            tgl_save.tgl_surat_masuk = dayjs(
+              this.Surat.tgl_surat_masuk,
+              "DD-MM-YYYY"
+            ).format("YYYY-MM-DD");
+          }
 
           axios({
             method: "post",
@@ -799,7 +876,8 @@ export default {
     },
     createId() {
       let id = "";
-      var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      var chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i < 5; i++) {
         id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
@@ -852,7 +930,7 @@ export default {
       // let idx = this.Surat.no_surat.indexOf("/");
       // let tmp = this.Surat.no_surat.slice(idx, this.Surat.no_surat.length);
 
-      this.Surat.no_surat = this.Surat.tipeSurat.value ;
+      this.Surat.no_surat = this.Surat.tipeSurat.value;
     },
     trimSpace(str) {
       return str.replace(" ", "");
@@ -892,146 +970,187 @@ export default {
     parseArsipUrls(filename_storagepath) {
       return parseArsipUrl(filename_storagepath);
     },
-    doDisposisi(Surat) {
-    	this.Surat = Surat
-      this.SuratDisposisi = {
-        dari:this.Surat.pengirim,
-        tgl_surat:this.Surat.tgl_surat,
-        no_surat:this.Surat.no_surat,
-        perihal:this.Surat.perihal,
-        no_agenda:this.Surat.no_agenda,
-        tgl_terima:this.Surat.tgl_surat_masuk,
-        ttd:this.Surat.disposisis.ttd,
+    async doDisposisi(Surat) {
+      let png = null;
+
+      console.log("trying...",Surat);
+
+      try {
+        png = await this.SuratService.getTTD(Surat.disposisis.id);
+        console.log(png);
+      } catch (err) {
+        console.log(err);
       }
+      this.Surat = Surat;
+      this.SuratDisposisi = {
+        dari: this.Surat.pengirim,
+        tgl_surat: this.Surat.tgl_surat,
+        no_surat: this.Surat.no_surat,
+        perihal: this.Surat.perihal,
+        no_agenda: this.Surat.no_agenda,
+        tgl_terima: this.Surat.tgl_surat_masuk,
+        isi:(Surat.disposisis) ? Surat.disposisis.isi : null,
+        teruskan: (Surat.disposisis) ? JSON.parse(Surat.disposisis.teruskan) : null,
+        ttd: (Surat.disposisis) ? Surat.disposisis.ttd : null,
+        imgsrc: png,
+      };
 
       this.disposisiDialogs = true;
+      console.log('do disp',this.SuratDisposisi)
+      
     },
     async saveDisposisi() {
-        if (this.validateInput())
-        {
-          let url_save = useStore().parseApi("/suratmasuk/disposisi/"+this.Surat.id);
+      if (true) {
+        let url_save = useStore().parseApi(
+          "/suratmasuk/disposisi/" + this.Surat.id
+        );
+
+        let tgl_save = {
+          tgl_surat: null,
+          tgl_terima: null,
+        };
+
+console.log('modelteruskan:model',this.ModelSDTeruskan)
          
-           let tgl_save = {
-              tgl_surat:null,
-              tgl_terima:null
-            };
-
-            const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
-            console.log(isEmpty);
-            console.log(data);
-            if (!isEmpty){
-                // axios({
-                //     method:'POST',
-                //     url:useStore().parseApi('/ttd'),
-                //     data:{
-                //       ttd_data: data,
-                //     },
-                //     headers: {
-                //     Authorization: `Bearer ${useStore().token}`,
-
-                //     },
-                  
-                  
-                //   }).then((res) => {
-                //       let path = res.data
-                //       console.log('path',path)
-                //     })
-              this.SuratDisposisi.ttd_data = data
-            } else this.SuratDisposisi.ttd_data = null;
-
-            if (this.SuratDisposisi.tgl_surat instanceof Date) {
-                tgl_save.tgl_surat = dayjs(this.SuratDisposisi.tgl_surat).format('YYYY-MM-DD')
-            } else {
-                tgl_save.tgl_surat = dayjs(this.SuratDisposisi.tgl_surat,'DD-MM-YYYY').format('YYYY-MM-DD')
-            }
-
-            if (this.SuratDisposisi.tgl_terima instanceof Date) {
-                tgl_save.tgl_terima = dayjs(this.SuratDisposisi.tgl_terima).format('YYYY-MM-DD')
-            } else {
-                tgl_save.tgl_terima = dayjs(this.SuratDisposisi.tgl_terima,'DD-MM-YYYY').format('YYYY-MM-DD')
-            }
-
-            console.log(this.SuratDisposisi,tgl_save)
-            
-
-          axios({
-            method: "post",
-            url: url_save,
-            data: {
-              tgl_surat: tgl_save.tgl_surat,
-              tgl_terima: tgl_save.tgl_terima,
-              no_agenda: this.SuratDisposisi.no_agenda,
-              perihal: this.SuratDisposisi.perihal,
-              dari: this.SuratDisposisi.dari,
-              no_surat: this.SuratDisposisi.no_surat,
-              ttd_data: this.SuratDisposisi.ttd_data,
-            },
-            headers: {
-              Authorization: `Bearer ${useStore().token}`,
-            },
-          }).then((res) => {
-             console.log('after save disposii',res.data)
-            this.SuratService.getSurats().then((data) => {
-              this.Surats = data;
-
-              console.log(this.Surats);
-            });
-            this.disposisiDialogs = false;
-            console.log("save", res.data);
-            window.open(`${location.protocol}//${location.hostname}/print/disposisi/${this.Surat.id}`, "_blank")
-            // this.disposisiDialogs = false;
-          })
-        }
+        this.SuratDisposisi.teruskan = this.ModelSDTeruskan  
         
-          
-          
-          
-    },
-     onUploadClickAtTable(data){
-       useStore().arsipsTemp = data.arsips
-       console.log(useStore().arsipsTemp)
-       this.$router.push({path:'/view-upload'})
-    },
-    onClickDisposisi(dt){
-      console.log('dt',dt)
+        console.log('modelteruskan:dterus',this.SuratDisposisi.teruskan)
+       
 
-      this.doDisposisi(dt)
+        
+        if (this.$refs.signaturePad) { 
+            const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
+            console.log('isempty',isEmpty);
+            console.log('data',data);
+            if (!isEmpty) {
+             
+              this.SuratDisposisi.ttd_data = data;
+              console.log('data',data)
+            } else {
+                this.SuratDisposisi.ttd_data = this.SuratDisposisi.imgsrc;
+                console.log('ttd data',this.SuratDisposisi.ttd_data)
+            }
+
+        } else {
+          this.SuratDisposisi.ttd_data = this.SuratDisposisi.imgsrc;
+                console.log('ttd data',this.SuratDisposisi.ttd_data)
+        }
+
+       
+      
+
+        if (this.SuratDisposisi.tgl_surat instanceof Date) {
+          tgl_save.tgl_surat = dayjs(this.SuratDisposisi.tgl_surat).format(
+            "YYYY-MM-DD"
+          );
+        } else {
+          tgl_save.tgl_surat = dayjs(
+            this.SuratDisposisi.tgl_surat,
+            "DD-MM-YYYY"
+          ).format("YYYY-MM-DD");
+        }
+
+        if (this.SuratDisposisi.tgl_terima instanceof Date) {
+          tgl_save.tgl_terima = dayjs(this.SuratDisposisi.tgl_terima).format(
+            "YYYY-MM-DD"
+          );
+        } else {
+          tgl_save.tgl_terima = dayjs(
+            this.SuratDisposisi.tgl_terima,
+            "DD-MM-YYYY"
+          ).format("YYYY-MM-DD");
+        }
+
+        console.log(this.SuratDisposisi, tgl_save);
+        
+
+        axios({
+          method: "post",
+          url: url_save,
+          data: {
+            tgl_surat: tgl_save.tgl_surat,
+            tgl_terima: tgl_save.tgl_terima,
+            no_agenda: this.SuratDisposisi.no_agenda,
+            perihal: this.SuratDisposisi.perihal,
+            dari: this.SuratDisposisi.dari,
+            no_surat: this.SuratDisposisi.no_surat,
+            ttd_data: this.SuratDisposisi.ttd_data,
+            isi:this.SuratDisposisi.isi,
+            teruskan:JSON.stringify(this.SuratDisposisi.teruskan),
+          },
+          headers: {
+            Authorization: `Bearer ${useStore().token}`,
+          },
+        }).then((res) => {
+          console.log("after save disposii", res.data);
+          this.SuratService.getSurats().then((data) => {
+            this.Surats = data;
+
+            console.log(this.Surats);
+          });
+          this.disposisiDialogs = false;
+          console.log("save", res.data);
+          window.open(
+            `${location.protocol}//${location.hostname}/print/disposisi/${this.Surat.id}`,
+            "_blank"
+          );
+          // this.disposisiDialogs = false;
+        });
+      }
     },
-    onPrint(){
-          const dialogRef = this.$dialog.open(DialogPrint, {
-                props: {
-                    header: 'Print Stok Masuk',
-                    style: {
-                        width: '80vw',
-                    },
-                    breakpoints:{
-                        '960px': '80vw',
-                        '640px': '90vw'
-                    },
-                    modal: true
-                },
-                data:{
-                    type:'print-surat-masuk',
-                },
-                templates: {
-                    // footer: () => {
-                    //     return [
-                    //         h('div',{class:'p-3'}),
-                         
-                    //         h(Button, { label: "Close", icon: "pi pi-check", onClick: () => dialogRef.close({ buttonType: 'Yes' }), autofocus: true })
-                    //     ]
-                    // }
-                },
-                onClose: (options) => {
-                    const data = options.data;
-                    if (data) {
-                        // this.refreshCategory()
-                        // this.$toast.add({ severity:'info', 'ok', life: 3000 });
-                    }
-                }
-            });
-        // window.open(`${location.protocol}//${location.hostname}/print/suratmasuk`, "_blank")
+    onUploadClickAtTable(data) {
+      useStore().arsipsTemp = data.arsips;
+      console.log(useStore().arsipsTemp);
+      this.$router.push({ path: "/view-upload" });
     },
+    onClickDisposisi(dt) {
+      console.log("dt", dt);
+
+      this.doDisposisi(dt);
+    },
+    onPrint() {
+      const dialogRef = this.$dialog.open(DialogPrint, {
+        props: {
+          header: "Print Stok Masuk",
+          style: {
+            width: "80vw",
+          },
+          breakpoints: {
+            "960px": "80vw",
+            "640px": "90vw",
+          },
+          modal: true,
+        },
+        data: {
+          type: "print-surat-masuk",
+        },
+        templates: {
+          // footer: () => {
+          //     return [
+          //         h('div',{class:'p-3'}),
+          //         h(Button, { label: "Close", icon: "pi pi-check", onClick: () => dialogRef.close({ buttonType: 'Yes' }), autofocus: true })
+          //     ]
+          // }
+        },
+        onClose: (options) => {
+          const data = options.data;
+          if (data) {
+            // this.refreshCategory()
+            // this.$toast.add({ severity:'info', 'ok', life: 3000 });
+          }
+        },
+      });
+      // window.open(`${location.protocol}//${location.hostname}/print/suratmasuk`, "_blank")
+    },
+
+    gantiTTD(){
+      
+      this.SuratDisposisi.imgsrc = null
+      console.log('ganti ttd',this.SuratDisposisi)
+      console.log('ganti ttd',this.$refs.signaturePad)
+      if (this.$refs.signaturePad) this.$refs.signaturePad.clearSignature()
+
+    }
   },
 };
 </script>

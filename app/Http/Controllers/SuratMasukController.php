@@ -119,20 +119,25 @@ class SuratMasukController extends Controller {
 		$disp->delete();
 		$del = 'woo';
 
-		if (count($old_path)) {
-			if (Storage::exists($old_path[0]->ttd)) {
-				$del = Storage::delete($old_path[0]->ttd);
-				// return response(['ada', $old_path[0]]);
+		$isEmptyTTD = !isset($fields['ttd_data']);
+
+		if (!$isEmptyTTD) {
+			if (count($old_path)) {
+
+				if (Storage::exists($old_path[0]->ttd)) {
+					$del = Storage::delete($old_path[0]->ttd);
+					// return response(['ada', $old_path[0]]);
+				}
+				// return respo/nse(['---ada', $old_path[0]]);
+
 			}
-			// return respo/nse(['---ada', $old_path[0]]);
+			$data_uri = $fields['ttd_data'];
+			$encoded_image = explode(",", $data_uri)[1];
+			$decoded_image = base64_decode($encoded_image);
+			Storage::put('tmp/ttd.png', $decoded_image);
+			$new_path = Storage::putFile('ttd', new \Illuminate\Http\File(storage_path('app/tmp/ttd.png')));
 
 		}
-
-		$data_uri = $fields['ttd_data'];
-		$encoded_image = explode(",", $data_uri)[1];
-		$decoded_image = base64_decode($encoded_image);
-		Storage::put('tmp/ttd.png', $decoded_image);
-		$new_path = Storage::putFile('ttd', new \Illuminate\Http\File(storage_path('app/tmp/ttd.png')));
 
 		$disposisi = new Disposisi;
 		$disposisi->dari = $fields['dari'];
@@ -141,13 +146,18 @@ class SuratMasukController extends Controller {
 		$disposisi->perihal = $fields['perihal'];
 		$disposisi->no_agenda = $fields['no_agenda'];
 		$disposisi->tgl_terima = $fields['tgl_terima'];
-		$disposisi->ttd = $new_path;
+		$disposisi->isi = $fields['isi'];
+		$disposisi->teruskan = $fields['teruskan'];
+
+		if (!$isEmptyTTD) {
+			$disposisi->ttd = $new_path;
+		}
 
 		$res = $surat->disposisis()->save($disposisi);
 
 		$a = $surat->disposisis;
 
-		return response([$surat, $del, $old_path[0]->ttd], 200);
+		return response([$surat], 200);
 
 	}
 

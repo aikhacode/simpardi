@@ -9,7 +9,7 @@ class Disposisi extends Model {
 	use HasFactory;
 
 	protected $fillable = [
-		'dari', 'tgl_surat', 'no_surat', 'perihal', 'no_agenda', 'tgl_terima',
+		'dari', 'tgl_surat', 'no_surat', 'perihal', 'no_agenda', 'tgl_terima', 'ttd', 'isi', 'teruskan',
 	];
 
 	public function disposisiable() {

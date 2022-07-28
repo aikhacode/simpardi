@@ -198,9 +198,31 @@ Route::get('/print/suratkeluar', function (Request $request) {
 	// return $pdf->inline();
 });
 
-Route::get('/preview/disposisi/{id}', function ($id) {
+Route::get('/print/disposisi/{id}', function ($id) {
 	$surat = SuratMasuk::find($id);
 	$surat->disposisis;
 
-	return view('disposisi', ['data' => $surat->disposisis]);
+	// return Storage::get($surat->disposisis->ttd);
+
+	// $storagepath = storage_path('app/' . $disp->ttd);
+
+	// if (!file_exists($storagepath)) {
+
+	// 	return response(['no exist', $storagepath], 401);
+
+	// }
+
+	// return response()->download($path, $arsip[0]->filename);
+	// return response()->file($storagepath);
+	// $ttd = 'data:image/png;base64,' . base64_encode(Storage::get($surat->disposisis->ttd));
+	$ttd = base64_encode(Storage::get($surat->disposisis->ttd));
+
+	$teruskan = json_decode($surat->disposisis->teruskan, true);
+
+	$pdf = \Barryvdh\DomPDF\Facade\Pdf::loadview('disposisi', [
+		'data' => $surat->disposisis,
+		'teruskan' => $teruskan,
+		'ttd' => $ttd,
+	]);
+	return $pdf->stream();
 });
