@@ -996,7 +996,8 @@ export default {
       };
 
       this.disposisiDialogs = true;
-      console.log('do disp',this.SuratDisposisi)
+
+      console.log('do disp dd',this.SuratDisposisi)
       
     },
     async saveDisposisi() {
