@@ -14,7 +14,7 @@ class DocumentController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index($type) {
-		$doc = (Document::where('type', $type)->orderBy('tahun'));
+		$doc = (Document::where('type', $type)->orderBy('tahun', 'DESC'));
 
 		$res = $doc->get();
 
