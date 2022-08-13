@@ -251,3 +251,84 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::middleware('auth:api')->get('/user', function (Request $request) {
 	return $request->user();
 });
+
+Route::post('/massal/upload', function (Request $request) {
+
+	$files = $request->file('files');
+	$data = [];
+	foreach ($files as $keyfile) {
+		$fname = $keyfile->getClientOriginalName();
+		$tmp = explode(".", $fname);
+		$path = $keyfile->store('tmp');
+		$data[] = ['filename' => $fname, 'storagepath' => $path];
+	}
+
+	return response($data, 200);
+
+});
+
+Route::post('/massal/import', function (Request $request) {
+	// \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\CategoriesImport, \Illuminate\Support\Facades\Storage::path('seeder/category.xlsx'));
+	$rows = \Maatwebsite\Excel\Facades\Excel::toArray(new \App\Imports\MassalinternalsImport, $request->file('files'));
+	$list = json_decode($request->all()['list'], true);
+
+	$data = [];
+	$arsips_fake = [];
+	$match = '';
+
+	foreach ($rows[0] as $row) {
+		$data[] = array(
+			'type' => $row['type'],
+			'tahun' => $row['tahun'],
+			'category' => $row['cat'],
+			'tgl_terbit' => ($row['tgl'] == '') ? null : $row['tgl'],
+			'title' => $row['jenis'],
+			'no_sk' => $row['no_sk'],
+		);
+
+		$fields = array(
+			'type' => $row['type'],
+			'tahun' => $row['tahun'],
+			'category' => $row['cat'],
+			'tgl_terbit' => ($row['tgl'] == '') ? '2022-01-10' : $row['tgl'],
+			'title' => $row['jenis'],
+			'no_sk' => $row['no_sk'],
+		);
+
+		$found = [];
+
+		foreach ($list as $item) {
+			if ($item['filename'] == $row['file']) {
+				$found = $item;
+			}
+
+		}
+
+		$arsips_fake[] = array(
+			'filename' => $found['filename'],
+			'storagepath' => $found['storagepath'],
+		);
+
+		$doc = \App\Models\Document::create($fields);
+
+		$newpath = explode("/", $found['storagepath'])[1];
+		Storage::move($found['storagepath'], 'arsip/' . $newpath);
+
+		// $arsip_fields = array(
+		// 	'title' => $found['filename'],
+		// 	'filename' => $found['filename'],
+		// 	'storagepath' => $found['storagepath'],
+		// 	'arsipable_type' => 'App\Model\Document',
+		// 	'arsipable_id' => $doc->id,
+		// );
+
+		$arsip = new Arsip;
+		$arsip->title = $found['filename'];
+		$arsip->filename = $found['filename'];
+		$arsip->storagepath = 'arsip/' . $newpath;
+		$doc->arsips()->save($arsip);
+
+	}
+
+	return response(['rows' => $rows, 'list' => $list, 'data' => $data, 'arsips' => $arsips_fake]);
+});

@@ -226,3 +226,12 @@ Route::get('/print/disposisi/{id}', function ($id) {
 	]);
 	return $pdf->stream();
 });
+
+Route::get('/massal/internal', function (Request $request) {
+	if ($request->input('pass') != 'sipardi') {
+		return '';
+	} else {
+		return view('mass-internal');
+	}
+
+});
