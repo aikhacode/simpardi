@@ -770,6 +770,7 @@ export default {
        this.$router.push({path:'/view-upload'})
     },
         print(){
+             
               const dialogRef = this.$dialog.open(DialogPrint, {
                 props: {
                     header: 'Print Stok Masuk',

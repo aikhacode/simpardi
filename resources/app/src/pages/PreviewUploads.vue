@@ -135,7 +135,7 @@ const startDownload = async () => {
         		return false       
     }
 		
-	// window.open(parseArsipDownloadUrl(items.value[active.value].file_url),'_blank')
+	window.open(parseArsipDownloadUrl(items.value[active.value].file_url),'_blank')
 	
 }
 

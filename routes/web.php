@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DownloadlogController;
 use App\Models\Arsip;
 use App\Models\SuratKeluar;
 use App\Models\SuratMasuk;
@@ -144,6 +145,8 @@ Route::get('/print/suratmasuk', function (Request $request) {
 	// $pdf = PDF::loadview('disposisi', ['data' => $surat->disposisis]);
 	// return $pdf->inline();
 });
+
+Route::get('/print/distribusi', [DownloadlogController::class,'print']);
 
 Route::get('/print/suratkeluar', function (Request $request) {
 	$periode = array('start' => $request->query('start'), 'end' => $request->query('end'));

@@ -88,6 +88,15 @@ export default {
                       '_blank' 
                     );   
                 }
+
+                if (this.dialogRef.data.type=='print-distribusi'){
+                    // console.log(arg.barcode)
+                    
+                    window.open(
+                      parseWeb(`/print/distribusi?start=${arg.date1}&end=${arg.date2}`),
+                      '_blank' 
+                    );   
+                }
                  
             } else alert('date tidak sesuai')
             this.valid_date = false

@@ -181,7 +181,7 @@
                 :options="categoryDocument"
                 optionLabel="label"
                 optionValue='value'
-                placeholder="Pilih Kategori Document (SOP TU/GIZI dll)"
+                placeholder="Pilih Kategori Document "
                 @change="onCategoryDocumentChange"
               >
                 <template #value="slotProps">
@@ -415,7 +415,7 @@ export default {
       submitted: false,
       editPickExtra:{
         tahun: {label:'2022',value:'2022'},
-        categoryDocument:{label:'SK',value:'SK'},
+        categoryDocument:'',
       },
       optionsTahun:[
         { label: "2020", value: "2020" },
@@ -426,12 +426,12 @@ export default {
         { label: "2025", value: "2025" },
       ],
       categoryDocument: [
-        { label: "SOP TU", value: "SOP TU" },
-        { label: "SOP GIGI", value: "SOP GIGI" },
-        { label: "SOP KIA", value: "SOP KIA" },
-        { label: "SK TU", value: "SK TU" },
-        { label: "SK GIGI", value: "SK GIGI" },
-         { label: "SK MUTU", value: "SK MUTU" },
+        { label: "SK", value: "SK" },
+        { label: "SOP", value: "SOP" },
+        // { label: "SOP KIA", value: "SOP KIA" },
+        // { label: "SK TU", value: "SK TU" },
+        // { label: "SK GIGI", value: "SK GIGI" },
+        //  { label: "SK MUTU", value: "SK MUTU" },
 
       ],
       uploadUrl: `${location.protocol}//${location.hostname}/api/upload`,
@@ -466,6 +466,7 @@ export default {
         // no_Document: "445/   /403.103.17/2022",
         arsips: [],
         tahun:'2022',
+        category:'SK'
       };
 
       this.submitted = false;
@@ -479,6 +480,7 @@ export default {
            }
         }) 
       })
+      console.log({editPickExtra:this.editPickExtra.categoryDocument})
       this.DocumentDialog = true;
     },
     hideDialog() {
@@ -658,9 +660,9 @@ export default {
       };
     },
     onCategoryDocumentChange() {
-    	console.log(this.Document.categoryDocument);
-    	console.log(this.Document.category);
-        this.Document.category = this.editPickExtra.categoryDocument.value;
+    	
+        this.Document.category = this.editPickExtra.categoryDocument;
+        console.log({cat:this.Document.category,pick:this.editPickExtra.categoryDocument})
     },
     trimSpace(str) {
       return str.replace(" ", "");
