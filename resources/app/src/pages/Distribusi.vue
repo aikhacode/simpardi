@@ -3,14 +3,14 @@
     <div class="col-12">
       <div class="card">
         <Toast />
-        <Toolbar class="mb-4">
+         <Toolbar class="mb-4">
           <template v-slot:start>
             <div class="my-2">
               <Button
-                label="New"
-                icon="pi pi-plus"
+                label="Print"
+                icon="pi pi-print"
                 class="p-button-success mr-2"
-                @click="openNew"
+                @click="onPrint"
               />
              <!--  <Button
                 label="Delete"
@@ -57,7 +57,7 @@
             <div
               class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
             >
-              <h5 class="m-0">Manage Document Internal</h5>
+              <h5 class="m-0">Distribusi Document</h5>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText v-model="filters['global'].value" placeholder="Search..." />
@@ -67,45 +67,25 @@
 
           <!-- <Column selectionMode="multiple" headerStyle="width: 3rem"></Column> -->
           <Column
-            field="tahun"
-            header="Tahun"
+            field="created_at"
+            header="Tgl"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Tanggal</span>
+              {{ formatDate(slotProps.data.created_at) }}
+            </template>
+        </Column>
+          <Column
+            field="title"
+            header="Judul"
             :sortable="true"
             headerStyle="width:14%; min-width:10rem;"
           />
-          <Column
-            field="category"
-            header="Kategori"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Kategori</span>
-              {{ slotProps.data.category }}
-            </template>
-          </Column>
-          <Column
-            field="title"
-            header="Title"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Judul</span>
-              {{ slotProps.data.title }}
-            </template>
-          </Column>
-          <Column
-            field="tgl_terbit"
-            header="TGL Terbit"
-            :sortable="true"
-            headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Tgl Terbit</span>
-              {{ slotProps.data.tgl_terbit }}
-            </template>
-          </Column>
-          <Column
+           
+         
+         <Column
             field="no_sk"
             header="No SK"
             :sortable="true"
@@ -117,35 +97,20 @@
             </template>
           </Column>
 
-          <Column
-              header="Upload"
-              headerStyle="width:14%; min-width:10rem;"
-          >
-            <template #body="slotProps">
-              
-              <Button v-if="slotProps.data.arsips.length"
-                label="Ada"
-                class="p-button-success mr-2"
-                @click="onUploadClickAtTable(slotProps.data)"
-              />
-            </template>
-          </Column>
+           <Column
+            field="program"
+            header="Program"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          />
 
-          <Column header="Action" headerStyle="min-width:10rem;">
-            <template #body="slotProps">
-              <Button
-                icon="pi pi-pencil"
-                class="p-button-rounded p-button-success mr-2"
-                @click="editDocument(slotProps.data)"
-              />
-              <Button
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-warning mt-2"
-                @click="confirmDeleteDocument(slotProps.data)"
-                :disabled="store.isNotAdmin()"
-              />
-            </template>
-          </Column>
+          <Column
+            field="downloader"
+            header="Downloader"
+            :sortable="true"
+            headerStyle="width:14%; min-width:10rem;"
+          />
+
         </DataTable>
 
         <Dialog
@@ -391,7 +356,7 @@
 
 <script>
 import { FilterMatchMode } from "primevue/api";
-import DocumentService from "../service/DocumentInternalService.js";
+import DownloadsService from "../service/DownloadlogService.js";
 import { useStore } from "@/store.js";
 import axios from "axios";
 import { parseArsipUrl,dayjs } from "@/helper.js";
@@ -439,13 +404,13 @@ export default {
       
     };
   },
-  DocumentService: null,
+  DownloadsService: null,
   created() {
-    this.DocumentService = new DocumentService();
+    this.DownloadsService = new DownloadsService();
     this.initFilters();
   },
   mounted() {
-    this.DocumentService.getDocuments().then((data) => {
+    this.DownloadsService.getDownloads().then((data) => {
       this.Documents = data;
       console.log(this.Documents);
     });
@@ -459,6 +424,9 @@ export default {
           currency: "USD",
         });
       return;
+    },
+    formatDate(value){
+      return dayjs(value).format('YYYY-MM-DD')
     },
     openNew() {
       this.Document = {

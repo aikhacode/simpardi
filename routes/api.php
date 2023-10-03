@@ -8,6 +8,7 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\SuratKeluarController;
 use App\Http\Controllers\SuratMasukController;
 use App\Http\Controllers\TipesuratController;
+use App\Http\Controllers\DownloadlogController;
 use App\Models\Arsip;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -82,6 +83,9 @@ Route::get('/bro', [AuthController::class, 'index']);
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
+	Route::post('/logdl',[DownloadlogController::class,'store']);
+	Route::get('/logdls',[DownloadlogController::class,'index']);
 
 	Route::get('/ttd/disposisi/{id}', function ($id) {
 		$disp = \App\Models\Disposisi::find($id);

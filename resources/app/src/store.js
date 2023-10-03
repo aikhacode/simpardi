@@ -9,6 +9,8 @@ export const useStore = defineStore("main", {
     state: () => {
         return {
             authenticated: false,
+            currentPickDocumentInternal: {},
+            userCurrentLoginName:'',
             token: "",
             login: {
                 userName: "",
@@ -126,6 +128,7 @@ export const useStore = defineStore("main", {
                 this.login.email = res.data.user.email;
                 this.login.userId = res.data.user.id;
                 this.login.data.role = res.data.user.role;
+                this.userCurrentLoginName = res.data.user.name;
             } catch (err) {
                 console.log(err.response.status);
                 this.authenticated = false;

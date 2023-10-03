@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArsipPegawai;
+use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 

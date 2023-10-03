@@ -71,6 +71,7 @@ export default {
                         {label: "Dokumen Eksternal", icon: "pi pi-fw pi-folder-open", to: "/dokument-eksternal"},
                         {label: 'Surat Masuk', icon: 'pi pi-fw pi-envelope', to: '/surat-masuk'},
                         {label: 'Surat Keluar', icon: 'pi pi-fw pi-briefcase', to: '/surat-keluar'},
+                        {label: 'Distribusi', icon: 'pi pi-fw pi-folder', to: '/distribusi'},
                         ]
                 },
                 {   label: 'AKUN',

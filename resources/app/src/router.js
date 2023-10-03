@@ -25,12 +25,12 @@ const routes = [
                 component: () => import("./components/Dashboard.vue"),
                 meta: { requiresAuth: true },
             },
-            // {
-            //     path: "/history",
-            //     name: "history",
-            //     component: () => import("./components/History.vue"),
-            //     meta: { requiresAuth: true },
-            // },
+            {
+                path: "/distribusi",
+                name: "distribusi",
+                component: () => import("./pages/Distribusi.vue"),
+                meta: { requiresAuth: true },
+            },
             {
                 path: "/data-user",
                 name: "datauser",
