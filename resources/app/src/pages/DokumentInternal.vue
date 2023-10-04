@@ -447,7 +447,7 @@ export default {
   mounted() {
     this.DocumentService.getDocuments().then((data) => {
       this.Documents = data;
-      console.log(this.Documents);
+      console.log({internal:this.Documents});
     });
   },
 

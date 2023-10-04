@@ -10,7 +10,7 @@ class Arsip extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title','filename','storagepath'
+        'title','filename','storagepath','arsipable_type','arsipable_id'
     ];
 
     public function arsipable()

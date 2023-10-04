@@ -9,7 +9,7 @@ class Document extends Model {
 	use HasFactory;
 
 	protected $fillable = [
-		'type', 'category', 'tgl_terbit', 'title', 'no_sk', 'tahun',
+		'type', 'category', 'tgl_terbit', 'title', 'no_sk', 'tahun','id'
 	];
 
 	public function arsips() {

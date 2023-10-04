@@ -20,6 +20,7 @@ class DocumentController extends Controller {
 
 		foreach ($res as &$key) {
 			// code...
+			
 			$key->tgl_terbit = \Carbon\Carbon::parse($key->tgl_terbit)->format('d-m-Y');
 			$a = $key->arsips;
 		}

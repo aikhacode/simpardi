@@ -238,3 +238,15 @@ Route::get('/massal/internal', function (Request $request) {
 	}
 
 });
+
+Route::get('/importsk',function (){
+	$res = \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\SKImport, \Illuminate\Support\Facades\Storage::path('seeder/sk2020import.xlsx'));
+	
+	return response($res,200);
+});
+
+Route::get('/importarsip',function (){
+	$res = \Maatwebsite\Excel\Facades\Excel::import(new \App\Imports\ArsipImport, \Illuminate\Support\Facades\Storage::path('seeder/arsips.xlsx'));
+	
+	return response($res,200);
+});
